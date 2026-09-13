@@ -1,0 +1,107 @@
+name: Synchronize market index
+
+on:
+  pull_request:
+    paths:
+      - registry.json
+      - scripts/extension-market-sync.mjs
+      - .github/workflows/sync-market.yml
+  push:
+    branches: [main]
+    paths:
+      - registry.json
+      - scripts/extension-market-sync.mjs
+      - .github/workflows/sync-market.yml
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: extension-market-index
+  cancel-in-progress: false
+
+jobs:
+  validate-pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: trusted
+          persist-credentials: false
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
+        with:
+          node-version: "24.15.0"
+      - name: Read candidate registry as data
+        working-directory: trusted
+        env:
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git fetch --no-tags origin "$PR_HEAD_SHA"
+          git show "$PR_HEAD_SHA:registry.json" > ../candidate-registry.json
+      - name: Validate candidate enrollment with trusted code
+        working-directory: trusted
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/extension-market-sync.mjs --registry ../candidate-registry.json --previous index.v2.json --out index.v2.json --check
+
+  generate:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      base_sha: ${{ steps.revision.outputs.base_sha }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: main
+          persist-credentials: false
+      - id: revision
+        run: echo "base_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
+        with:
+          node-version: "24.15.0"
+      - name: Synchronize reviewed releases
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/extension-market-sync.mjs --registry registry.json --previous index.v2.json --out index.v2.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: generated-market-index
+          path: index.v2.json
+          if-no-files-found: error
+
+  publish:
+    needs: generate
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: main
+          # This isolated job runs no submitted code and only stages index.v2.json.
+          persist-credentials: true
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: generated-market-index
+          path: generated
+      - name: Publish generated index after race check
+        env:
+          EXPECTED_BASE_SHA: ${{ needs.generate.outputs.base_sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_BASE_SHA" || { echo "::error::main advanced during generation; rerun synchronization"; exit 1; }
+          test -f generated/index.v2.json
+          test "$(find generated -type f | wc -l | tr -d ' ')" = "1"
+          cp generated/index.v2.json index.v2.json
+          git diff --quiet -- index.v2.json && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- index.v2.json
+          git commit -m "chore: synchronize market index"
+          git push origin HEAD:main
