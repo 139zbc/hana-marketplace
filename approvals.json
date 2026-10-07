@@ -9,6 +9,12 @@
     },
     {
       "kind": "app",
+      "id": "prompt-optimizer",
+      "tag": "v1.0.0",
+      "sha256": "4fbf74c0c35ed9be7f2fa45da864c45c897c5388b00485296dd859db0c53766e"
+    },
+    {
+      "kind": "app",
       "id": "session-porter",
       "tag": "v0.3.2",
       "sha256": "eb97065722063fdc89ca7e250dcad7cb33978b6a5c76d74fd9d05a91658f7975"
