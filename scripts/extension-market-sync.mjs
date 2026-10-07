@@ -1043,6 +1043,10 @@ function publishedTag(item, repository) {
   const parts = decodedPath.slice(prefix.length).split("/");
   return parts.length === 2 && parts[0] ? parts[0] : null;
 }
+function withReadme(item, registration, approval) {
+  if (item.readmeUrl) return item;
+  return { ...item, readmeUrl: `https://raw.githubusercontent.com/${registration.repository}/${encodeURIComponent(approval.tag)}/README.md` };
+}
 function reusablePublishedItem(item, registration, approval) {
   if (!item || item.publisher !== registration.publisher || item.archive.sha256 !== approval.sha256) return null;
   return publishedTag(item, registration.repository) === approval.tag ? item : null;
@@ -1064,12 +1068,12 @@ async function synchronizeMarket({ registry, approvals, previousIndex = null, fe
     const published = previousItems.get(enrollmentKey(registration));
     const reusable = reusablePublishedItem(published, registration, approval);
     if (reusable) {
-      items.push(reusable);
+      items.push(withReadme(reusable, registration, approval));
       continue;
     }
     try {
       const { candidate } = await readReleaseCandidate(registration, { approval, fetchImpl, token });
-      items.push(historyFor(published, candidate, registration));
+      items.push(withReadme(historyFor(published, candidate, registration), registration, approval));
     } catch (error) {
       failures.push(`${registration.kind}/${registration.id} (${registration.repository}): ${error instanceof Error ? error.message : String(error)}`);
     }
