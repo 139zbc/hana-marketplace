@@ -752,6 +752,8 @@ var MAX_API_BYTES = 2 * 1024 * 1024;
 var MAX_REDIRECTS = 5;
 var TIMEOUT_MS = 2e4;
 var REPOSITORY_RE = /^[A-Za-z0-9-]{1,39}\/[A-Za-z0-9_.-]{1,100}$/;
+var TAG_RE = /^[A-Za-z0-9][A-Za-z0-9._+-]{0,127}$/;
+var SHA256_RE = /^[0-9a-f]{64}$/;
 function isPlainObject2(value) {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
@@ -783,6 +785,47 @@ function readRegistry(raw) {
     seen.add(key);
     return { kind: entry.kind, id: entry.id, repository: entry.repository, publisher: entry.publisher.trim() };
   });
+}
+function enrollmentKey(record) {
+  return `${record.kind}:${record.id}`;
+}
+function readApprovalRecord(approval, label) {
+  if (!isPlainObject2(approval)) throw new Error(`${label} must be an object`);
+  exactKeys(approval, ["kind", "id", "tag", "sha256"], label);
+  if (!isExtensionKind(approval.kind)) throw new Error(`${label}.kind must be one of ${EXTENSION_KINDS.join(", ")}`);
+  if (!isSafeExtensionId(approval.id)) throw new Error(`${label}.id is not a safe extension id`);
+  if (typeof approval.tag !== "string" || !TAG_RE.test(approval.tag)) throw new Error(`${label}.tag must be a release tag of letters, digits, ".", "_", "+", or "-"`);
+  if (typeof approval.sha256 !== "string" || !SHA256_RE.test(approval.sha256)) throw new Error(`${label}.sha256 must be 64 lowercase hexadecimal characters`);
+  return { kind: approval.kind, id: approval.id, tag: approval.tag, sha256: approval.sha256 };
+}
+function readApprovalList(raw) {
+  if (!isPlainObject2(raw)) throw new Error("approvals must be a JSON object");
+  exactKeys(raw, ["schemaVersion", "approvals"], "approvals");
+  if (raw.schemaVersion !== 1) throw new Error("approvals.schemaVersion must be 1");
+  if (!Array.isArray(raw.approvals)) throw new Error("approvals.approvals must be an array");
+  const seen = /* @__PURE__ */ new Set();
+  return raw.approvals.map((approval, index) => {
+    const record = readApprovalRecord(approval, `approvals.approvals[${index}]`);
+    if (seen.has(enrollmentKey(record))) throw new Error(`approvals has duplicate approval ${enrollmentKey(record)}`);
+    seen.add(enrollmentKey(record));
+    return record;
+  });
+}
+function readApprovals(raw, registrations) {
+  const enrolled = new Set(registrations.map(enrollmentKey));
+  const approvals = /* @__PURE__ */ new Map();
+  for (const record of readApprovalList(raw)) {
+    if (!enrolled.has(enrollmentKey(record))) throw new Error(`approval ${enrollmentKey(record)} has no matching enrollment`);
+    approvals.set(enrollmentKey(record), record);
+  }
+  return approvals;
+}
+function applyApprovalProposal(raw, proposal) {
+  const pinned = readApprovalRecord(isPlainObject2(proposal) ? { kind: proposal.kind, id: proposal.id, tag: proposal.tag, sha256: proposal.sha256 } : proposal, "proposal");
+  const approvals = readApprovalList(raw).filter((record) => enrollmentKey(record) !== enrollmentKey(pinned));
+  approvals.push(pinned);
+  approvals.sort((a, b) => a.kind === b.kind ? a.id.localeCompare(b.id) : a.kind.localeCompare(b.kind));
+  return { schemaVersion: 1, approvals };
 }
 function parseJson(buffer, label) {
   try {
@@ -816,12 +859,13 @@ function assetFileName(url) {
 function expectedEntryName(registration, version) {
   return releaseEntryFileName(registration) || `${registration.kind}-${registration.id}-${version}.entry.json`;
 }
-function validateRelease(release) {
-  if (!isPlainObject2(release)) throw new Error("latest release payload must be an object");
-  if (release.draft === true) throw new Error("latest release is a draft");
-  if (release.prerelease === true) throw new Error("latest release is a prerelease");
-  if (typeof release.tag_name !== "string" || !release.tag_name.trim()) throw new Error("latest release has no tag name");
-  if (!Array.isArray(release.assets)) throw new Error("latest release has no assets array");
+function validateRelease(release, label, expectedTag) {
+  if (!isPlainObject2(release)) throw new Error(`${label} payload must be an object`);
+  if (release.draft === true) throw new Error(`${label} is a draft`);
+  if (release.prerelease === true) throw new Error(`${label} is a prerelease`);
+  if (typeof release.tag_name !== "string" || !release.tag_name.trim()) throw new Error(`${label} has no tag name`);
+  if (expectedTag !== void 0 && release.tag_name !== expectedTag) throw new Error(`${label} reports tag ${JSON.stringify(release.tag_name)}`);
+  if (!Array.isArray(release.assets)) throw new Error(`${label} has no assets array`);
   return { assets: release.assets, tagName: release.tag_name };
 }
 function assertReleaseAsset(asset, repository, tagName, label) {
@@ -845,10 +889,10 @@ function assertReleaseAsset(asset, repository, tagName, label) {
   }
   return asset;
 }
-function findOnlyAsset(assets, name, label, repository, tagName) {
+function findOnlyAsset(assets, name, label, repository, tagName, releaseLabel) {
   const matches = assets.filter((asset) => isPlainObject2(asset) && asset.name === name);
-  if (matches.length === 0) throw new Error(`latest release is missing ${label} asset ${name}`);
-  if (matches.length > 1) throw new Error(`latest release has ambiguous ${label} asset ${name}`);
+  if (matches.length === 0) throw new Error(`${releaseLabel} is missing ${label} asset ${name}`);
+  if (matches.length > 1) throw new Error(`${releaseLabel} has ambiguous ${label} asset ${name}`);
   return assertReleaseAsset(matches[0], repository, tagName, label);
 }
 function validateEntry(entry, registration) {
@@ -885,16 +929,18 @@ function githubApiFetch(fetchImpl, token) {
     return fetchImpl(input, { ...init, headers });
   };
 }
-async function readRelease(registration, { fetchImpl, token }) {
+async function readRelease(registration, { tag, fetchImpl, token }) {
+  const label = tag === void 0 ? "latest release" : `release ${tag}`;
+  const selector = tag === void 0 ? "latest" : `tags/${encodeURIComponent(tag)}`;
   const response = await fetchBounded({
-    url: `${API_BASE}/repos/${registration.repository}/releases/latest`,
+    url: `${API_BASE}/repos/${registration.repository}/releases/${selector}`,
     maxRedirects: 2,
     maxResponseBytes: MAX_API_BYTES,
     timeoutMs: TIMEOUT_MS,
     fetchImpl: githubApiFetch(fetchImpl, token)
   });
-  assertHttpSuccess(response, `${registration.kind}/${registration.id}`);
-  return validateRelease(parseJson(response.body, "latest release metadata"));
+  assertHttpSuccess(response, `${registration.kind}/${registration.id} ${label}`);
+  return { ...validateRelease(parseJson(response.body, `${label} metadata`), label, tag), label };
 }
 async function readEntryAsset(asset, registration, options) {
   const response = await fetchBounded({
@@ -976,27 +1022,61 @@ function historyFor(previous, candidate, registration) {
 function deepEqual(a, b) {
   return stableJson(a) === stableJson(b);
 }
-async function synchronizeMarket({ registry, previousIndex = null, fetchImpl = fetch, token, now = () => /* @__PURE__ */ new Date() }) {
+async function readReleaseCandidate(registration, { approval, fetchImpl, token }) {
+  const { assets, tagName, label } = await readRelease(registration, { tag: approval?.tag, fetchImpl, token });
+  const fixedName = releaseEntryFileName(registration);
+  const possibleEntries = fixedName ? [findOnlyAsset(assets, fixedName, "entry", registration.repository, tagName, label)] : assets.filter((asset) => isPlainObject2(asset) && typeof asset.name === "string" && asset.name.startsWith(`${registration.kind}-${registration.id}-`) && asset.name.endsWith(".entry.json"));
+  if (!fixedName && possibleEntries.length !== 1) throw new Error(`${label} must contain exactly one entry metadata asset for ${registration.kind}-${registration.id}`);
+  const entryAsset = assertReleaseAsset(possibleEntries[0], registration.repository, tagName, "entry");
+  const entry = await readEntryAsset(entryAsset, registration, { fetchImpl, token });
+  const expectedName = expectedEntryName(registration, entry.version);
+  if (entryAsset.name !== expectedName) throw new Error(`entry asset must be named ${expectedName}`);
+  const zipName = validateEntry(entry, registration);
+  if (approval && entry.archive.sha256 !== approval.sha256) throw new Error(`${label} ZIP sha256 does not match the approved sha256`);
+  const zipAsset = findOnlyAsset(assets, zipName, "ZIP", registration.repository, tagName, label);
+  await verifyArchive(zipAsset, entry, registration, { fetchImpl, token });
+  return { candidate: normalizeItem(projectEntry(entry, registration, zipAsset.browser_download_url)), tagName };
+}
+function publishedTag(item, repository) {
+  if (!item || item.repository !== canonicalRepository(repository)) return null;
+  let decodedPath;
+  try {
+    decodedPath = decodeURIComponent(new URL(item.archive.url).pathname);
+  } catch {
+    return null;
+  }
+  const prefix = `/${repository}/releases/download/`;
+  if (!decodedPath.startsWith(prefix)) return null;
+  const parts = decodedPath.slice(prefix.length).split("/");
+  return parts.length === 2 && parts[0] ? parts[0] : null;
+}
+function reusablePublishedItem(item, registration, approval) {
+  if (!item || item.publisher !== registration.publisher || item.archive.sha256 !== approval.sha256) return null;
+  return publishedTag(item, registration.repository) === approval.tag ? item : null;
+}
+async function synchronizeMarket({ registry, approvals, previousIndex = null, fetchImpl = fetch, token, now = () => /* @__PURE__ */ new Date() }) {
   const registrations = readRegistry(registry);
+  const approved = readApprovals(approvals, registrations);
   const previous = previousIndex === null ? null : strictIndex(previousIndex, "previous index");
-  const previousItems = new Map((previous?.items || []).map((item) => [`${item.kind}:${item.id}`, item]));
+  const previousItems = new Map((previous?.items || []).map((item) => [enrollmentKey(item), item]));
   const failures = [];
   const items = [];
+  const pending = [];
   for (const registration of registrations) {
+    const approval = approved.get(enrollmentKey(registration));
+    if (!approval) {
+      pending.push(`${registration.kind}/${registration.id}`);
+      continue;
+    }
+    const published = previousItems.get(enrollmentKey(registration));
+    const reusable = reusablePublishedItem(published, registration, approval);
+    if (reusable) {
+      items.push(reusable);
+      continue;
+    }
     try {
-      const { assets, tagName } = await readRelease(registration, { fetchImpl, token });
-      const fixedName = releaseEntryFileName(registration);
-      const possibleEntries = fixedName ? [findOnlyAsset(assets, fixedName, "entry", registration.repository, tagName)] : assets.filter((asset) => isPlainObject2(asset) && typeof asset.name === "string" && asset.name.startsWith(`${registration.kind}-${registration.id}-`) && asset.name.endsWith(".entry.json"));
-      if (!fixedName && possibleEntries.length !== 1) throw new Error(`latest release must contain exactly one entry metadata asset for ${registration.kind}-${registration.id}`);
-      const entryAsset = assertReleaseAsset(possibleEntries[0], registration.repository, tagName, "entry");
-      const entry = await readEntryAsset(entryAsset, registration, { fetchImpl, token });
-      const expectedName = expectedEntryName(registration, entry.version);
-      if (entryAsset.name !== expectedName) throw new Error(`entry asset must be named ${expectedName}`);
-      const zipName = validateEntry(entry, registration);
-      const zipAsset = findOnlyAsset(assets, zipName, "ZIP", registration.repository, tagName);
-      await verifyArchive(zipAsset, entry, registration, { fetchImpl, token });
-      const candidate = normalizeItem(projectEntry(entry, registration, zipAsset.browser_download_url));
-      items.push(historyFor(previousItems.get(`${registration.kind}:${registration.id}`), candidate, registration));
+      const { candidate } = await readReleaseCandidate(registration, { approval, fetchImpl, token });
+      items.push(historyFor(published, candidate, registration));
     } catch (error) {
       failures.push(`${registration.kind}/${registration.id} (${registration.repository}): ${error instanceof Error ? error.message : String(error)}`);
     }
@@ -1018,7 +1098,86 @@ ${failures.map((failure) => `- ${failure}`).join("\n")}`);
   }
   const index = strictIndex(draft, "generated index");
   const unchanged = Boolean(previous && deepEqual(index, previous));
-  return { index, unchanged };
+  return { index, unchanged, pending };
+}
+function capabilitiesOf(item) {
+  return [...new Set((item?.permissions || []).map((permission) => permission.capability))].sort();
+}
+function describePermissions(candidate, published) {
+  const next = capabilitiesOf(candidate);
+  if (!published) return next.length ? next.map((name) => `- \`${name}\``).join("\n") : "No declared permissions.";
+  const before = new Set(capabilitiesOf(published));
+  const after = new Set(next);
+  const lines = [
+    ...next.filter((name) => !before.has(name)).map((name) => `- Added \`${name}\``),
+    ...[...before].filter((name) => !after.has(name)).map((name) => `- Removed \`${name}\``)
+  ];
+  return lines.length ? lines.join("\n") : "No permission changes.";
+}
+function buildProposal(registration, tag, candidate, published) {
+  const repository = canonicalRepository(registration.repository);
+  const sha256 = candidate.archive.sha256;
+  const label = candidate.version === "0.0.0" ? `content ${sha256.slice(0, 12)}` : candidate.version;
+  const previousTag = publishedTag(published, registration.repository);
+  const previousLabel = published ? published.version === "0.0.0" ? `content ${published.archive.sha256.slice(0, 12)}` : published.version : "not published";
+  const rows = [
+    ["Extension", `\`${registration.kind}/${registration.id}\``],
+    ["Repository", repository],
+    ["Release", `${repository}/releases/tag/${encodeURIComponent(tag)}`],
+    ["Version", `\`${label}\` (published: \`${previousLabel}\`)`],
+    ["ZIP SHA-256", `\`${sha256}\``],
+    ["ZIP size", `${candidate.archive.size} bytes`],
+    ...previousTag && previousTag !== tag ? [["Source changes", `${repository}/compare/${encodeURIComponent(previousTag)}...${encodeURIComponent(tag)}`]] : []
+  ];
+  const body = [
+    "Release discovery found a stable release that is not approved yet. Merging this pull request approves exactly the ZIP below for the market index.",
+    "",
+    "| Field | Value |",
+    "| --- | --- |",
+    ...rows.map(([field, value]) => `| ${field} | ${value} |`),
+    "",
+    "### Permissions",
+    "",
+    describePermissions(candidate, published),
+    "",
+    "Review the release package before merging. Close this pull request to keep the published version unchanged.",
+    ""
+  ].join("\n");
+  return {
+    kind: registration.kind,
+    id: registration.id,
+    repository: registration.repository,
+    tag,
+    sha256,
+    version: candidate.version,
+    size: candidate.archive.size,
+    branch: `market-approval/${registration.kind}-${registration.id}-${sha256.slice(0, 12)}`,
+    title: `Approve ${registration.kind}/${registration.id} ${label}`,
+    body
+  };
+}
+async function discoverReleases({ registry, approvals, previousIndex = null, onlyChangedFrom = null, fetchImpl = fetch, token }) {
+  const registrations = readRegistry(registry);
+  const approved = readApprovals(approvals, registrations);
+  const previous = previousIndex === null ? null : strictIndex(previousIndex, "previous index");
+  const previousItems = new Map((previous?.items || []).map((item) => [enrollmentKey(item), item]));
+  const baseline = onlyChangedFrom === null ? null : new Map(readRegistry(onlyChangedFrom).map((record) => [enrollmentKey(record), record]));
+  const proposals = [];
+  const skipped = [];
+  for (const registration of registrations) {
+    if (baseline && deepEqual(baseline.get(enrollmentKey(registration)), registration)) continue;
+    try {
+      const { candidate, tagName } = await readReleaseCandidate(registration, { fetchImpl, token });
+      if (approved.get(enrollmentKey(registration))?.sha256 === candidate.archive.sha256) continue;
+      if (!TAG_RE.test(tagName)) throw new Error(`release tag ${JSON.stringify(tagName)} must use only letters, digits, ".", "_", "+", or "-"`);
+      const published = previousItems.get(enrollmentKey(registration));
+      historyFor(published, candidate, registration);
+      proposals.push(buildProposal(registration, tagName, candidate, published));
+    } catch (error) {
+      skipped.push(`${registration.kind}/${registration.id} (${registration.repository}): ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+  return { proposals, skipped };
 }
 function writeIndexAtomically(outPath, index) {
   const directory = path.dirname(outPath);
@@ -1032,28 +1191,64 @@ function writeIndexAtomically(outPath, index) {
     fs.rmSync(pending, { force: true });
   }
 }
+var USAGE = [
+  "Usage: extension-market-sync --registry registry.json --approvals approvals.json --previous index.v2.json --out index.v2.json [--check]",
+  "       extension-market-sync --discover --registry registry.json --approvals approvals.json --previous index.v2.json --out proposals.json [--changed-from base-registry.json]",
+  "       extension-market-sync --apply-proposal proposal.json --approvals approvals.json"
+].join("\n");
 function parseArgs(argv) {
-  const args = { registry: null, previous: null, out: null, check: false };
+  const args = { registry: null, approvals: null, previous: null, out: null, check: false, discover: false, changedFrom: null, applyProposal: null };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     if (arg === "--registry") args.registry = argv[++i];
+    else if (arg === "--approvals") args.approvals = argv[++i];
     else if (arg === "--previous") args.previous = argv[++i];
     else if (arg === "--out") args.out = argv[++i];
     else if (arg === "--check") args.check = true;
+    else if (arg === "--discover") args.discover = true;
+    else if (arg === "--changed-from") args.changedFrom = argv[++i];
+    else if (arg === "--apply-proposal") args.applyProposal = argv[++i];
     else throw new Error(`unknown argument ${arg}`);
   }
-  if (!args.registry || !args.out) throw new Error("Usage: extension-market-sync --registry registry.json --previous index.v2.json --out index.v2.json [--check]");
+  const valid = args.applyProposal ? args.approvals && !args.registry && !args.out && !args.discover && !args.check : args.registry && args.approvals && args.out && !(args.discover && args.check) && (args.discover || !args.changedFrom);
+  if (!valid) throw new Error(USAGE);
   return args;
+}
+function readJsonFile(file) {
+  return JSON.parse(fs.readFileSync(path.resolve(file), "utf8"));
 }
 async function main() {
   try {
     const args = parseArgs(process.argv.slice(2));
+    if (args.applyProposal) {
+      const approvals = applyApprovalProposal(readJsonFile(args.approvals), readJsonFile(args.applyProposal));
+      writeIndexAtomically(path.resolve(args.approvals), approvals);
+      console.log(`extension-market-sync: pinned ${approvals.approvals.length} approval(s) in ${path.resolve(args.approvals)}`);
+      return;
+    }
     const outPath = path.resolve(args.out);
-    const previousPath = path.resolve(args.previous || args.out);
+    const previousPath = args.previous ? path.resolve(args.previous) : args.discover ? null : outPath;
     if (args.previous && !fs.existsSync(previousPath)) throw new Error(`--previous does not exist: ${previousPath}`);
-    const registry = JSON.parse(fs.readFileSync(path.resolve(args.registry), "utf8"));
-    const previous = fs.existsSync(previousPath) ? JSON.parse(fs.readFileSync(previousPath, "utf8")) : null;
-    const { index, unchanged } = await synchronizeMarket({ registry, previousIndex: previous, token: process.env.GITHUB_TOKEN });
+    const registry = readJsonFile(args.registry);
+    const approvalsDocument = readJsonFile(args.approvals);
+    const previous = previousPath && fs.existsSync(previousPath) ? readJsonFile(previousPath) : null;
+    if (args.discover) {
+      const { proposals, skipped } = await discoverReleases({
+        registry,
+        approvals: approvalsDocument,
+        previousIndex: previous,
+        onlyChangedFrom: args.changedFrom ? readJsonFile(args.changedFrom) : null,
+        token: process.env.GITHUB_TOKEN
+      });
+      writeIndexAtomically(outPath, proposals);
+      for (const proposal of proposals) console.log(`extension-market-sync: proposal ${proposal.kind}/${proposal.id} tag=${proposal.tag} version=${proposal.version} sha256=${proposal.sha256}`);
+      for (const failure of skipped) console.log(`extension-market-sync: skipped ${failure}`);
+      console.log(`extension-market-sync: ${proposals.length} proposal(s), ${skipped.length} skipped`);
+      if (args.changedFrom && skipped.length) process.exitCode = 1;
+      return;
+    }
+    const { index, unchanged, pending } = await synchronizeMarket({ registry, approvals: approvalsDocument, previousIndex: previous, token: process.env.GITHUB_TOKEN });
+    if (pending.length) console.log(`extension-market-sync: awaiting approval: ${pending.join(", ")}`);
     if (args.check) console.log(`extension-market-sync: ${unchanged ? "no changes" : "index would change"} (${index.items.length} item(s))`);
     else if (unchanged && outPath === previousPath) console.log(`extension-market-sync: no changes (${index.items.length} item(s))`);
     else {
@@ -1069,6 +1264,9 @@ if (process.argv[1] && fs.realpathSync(process.argv[1]) === fs.realpathSync(file
 export {
   MARKET_NAME,
   MARKET_SOURCE_ID,
+  applyApprovalProposal,
+  discoverReleases,
+  readApprovals,
   readRegistry,
   synchronizeMarket,
   writeIndexAtomically
