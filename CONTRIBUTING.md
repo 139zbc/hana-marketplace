@@ -57,7 +57,21 @@ Fork 本仓库，在 `registry.json` 的 `entries` 数组中追加一条记录�
 - `repository` 使用 `owner/repository`，不是完整 URL。
 - 除非维护者要求批量变更，一个 PR 只登记一个扩展。
 - **不要手工编辑 `index.v2.json`**，也不要为投稿修改同步器或工作流。
-- 按 PR 模板说明扩展用途，提供仓库及正式 Release 链接，便于维护者审核。
+- 按 [PR 模板](.github/PULL_REQUEST_TEMPLATE.md)填写下面的审阅材料，便于维护者在 PR 正文中直接查看。
+
+#### PR 审阅材料
+
+可以用中文或英文填写。请提供：
+
+- **基本信息**：扩展名称、类型与 ID、发布者、用途、作者仓库及正式 Release 链接；登记信息变更时说明改动。
+- **图标预览**：在正文中展示实际扩展图标；没有图标请注明。
+- **截图或演示**：有界面的扩展提供主要界面或操作结果截图，并配简短说明。纯工具类可以用调用输入与结果示例代替截图，也可补充录屏。
+- **自测报告**：Hana 版本、操作系统及版本、安装测试使用的 Release、测试步骤和实际结果，以及已知问题或未测试部分。
+- **权限与外部服务**：说明声明的能力、需要它们的原因，以及访问的外部服务和用途；没有则注明“无”，不要附上凭据。
+
+可直接把图标和截图拖入 GitHub 的 PR 正文编辑框，或插入可访问的图片链接，再预览确认图片能显示。无需将图片文件提交到市场仓库。上传前请遮盖个人信息、令牌和其他敏感内容。
+
+维护者打开 PR 正文即可查看这些图片；GitHub 的 PR 列表不会自动把 App 图标显示为投稿缩略图。这些材料是作者提供的审阅说明，并非自动生成或独立验证的报告。未测试或不适用的部分请如实标注；模板本身不新增自动化准入检查。
 
 ### 4. 检查、审核与上架
 
@@ -136,7 +150,21 @@ Fork this repository and append one record to the `entries` array in `registry.j
 
 The registry keeps `schemaVersion: 1`. The kind, id, and publisher must match the packer output. Use `owner/repository`, not a full URL. Submit one enrollment per PR unless maintainers request a batch.
 
-Follow the PR template, explain the extension's purpose, and link its repository and stable Release. **Do not edit `index.v2.json` manually** or change the synchronizer or workflows as part of an enrollment.
+Complete the review materials in the [PR template](.github/PULL_REQUEST_TEMPLATE.md). **Do not edit `index.v2.json` manually** or change the synchronizer or workflows as part of an enrollment.
+
+#### PR review materials
+
+You may write in Chinese or English. Include:
+
+- **Basic information:** extension name, kind and ID, publisher, purpose, author repository, and stable Release link. Explain any registration changes.
+- **Icon preview:** embed the actual extension icon in the PR body, or state that the extension has no icon.
+- **Screenshots or demo:** for extensions with a UI, show the main interface or results with short captions. Tool-only extensions may provide example inputs and outputs instead. A screen recording is optional.
+- **Author test report:** Hana version, OS and version, Release used for installation testing, test steps and actual results, and known issues or untested areas.
+- **Permissions and external services:** describe declared capabilities, why they are needed, and external services used. Write “None” where applicable; do not include credentials.
+
+Drag icons and screenshots into GitHub's PR body editor, or embed accessible image URLs, then use preview to check that they display. Do not commit these images to the catalog. Redact personal information, tokens, and other sensitive content before uploading.
+
+Maintainers can see the images in the PR body; GitHub's PR list does not automatically display App icons as submission thumbnails. These are author-provided review materials, not automatically generated or independently verified reports. Mark untested or inapplicable areas honestly. The template does not add automated admission checks.
 
 ### 4. Validate and wait for review
 
