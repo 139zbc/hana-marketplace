@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "sourceId": "official-global",
   "name": "Hana Global Market",
-  "publishedAt": "2026-10-07T14:42:07.253Z",
+  "publishedAt": "2026-10-07T14:43:26.694Z",
   "items": [
     {
       "kind": "app",
@@ -162,6 +162,51 @@
         "format": "zip"
       },
       "repository": "https://github.com/Hzl0929/Hana-Session-Porter"
+    },
+    {
+      "kind": "app",
+      "id": "token-tracker-app",
+      "name": "Token 用量",
+      "publisher": "H-i-m-s",
+      "description": "独立 Token 用量应用：内置会话扫描、历史归档、余额查询与原生看板；无需配套插件，支持接续旧版数据。",
+      "version": "8.5.0",
+      "permissions": [
+        {
+          "capability": "app/runtime.execute"
+        },
+        {
+          "capability": "app/runtime.local-machine"
+        },
+        {
+          "capability": "app/runtime.network"
+        },
+        {
+          "capability": "app/usage.read"
+        },
+        {
+          "capability": "app/sessions.read"
+        },
+        {
+          "capability": "app/input.status"
+        },
+        {
+          "capability": "app/hooks.provider-before-request"
+        },
+        {
+          "capability": "app/hooks.observe"
+        }
+      ],
+      "compatibility": {
+        "minAppVersion": "0.1050.9"
+      },
+      "archive": {
+        "url": "https://github.com/H-i-m-s/token-tracker/releases/download/v8.5.0/token-tracker-app-v8.5.0.zip",
+        "sha256": "0e8b445de59aef807e7464563abada067eef118fd059200f9d9860473ef1cc42",
+        "size": 320621,
+        "format": "zip"
+      },
+      "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiNmMGY0ZjgiLz48cGF0aCBkPSJNMTQgNDVWMzFNMjYgNDVWMjRNMzggNDVWMzRNNTAgNDVWMTYiIHN0cm9rZT0iIzVmOGNiNiIgc3Ryb2tlLXdpZHRoPSI3IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjEzIiByPSI0IiBmaWxsPSIjZDY0NTQ1Ii8+PC9zdmc+Cg==",
+      "repository": "https://github.com/H-i-m-s/token-tracker"
     },
     {
       "kind": "recipe",
