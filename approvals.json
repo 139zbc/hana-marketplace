@@ -9,6 +9,12 @@
     },
     {
       "kind": "app",
+      "id": "doc-intake",
+      "tag": "v3.0.0",
+      "sha256": "2587a4a28e6c7b13765d6bfa980ecaaf4c17090b73f469b92ec51f6771cecf35"
+    },
+    {
+      "kind": "app",
       "id": "git-save-load",
       "tag": "v3.2.0",
       "sha256": "d8379d4f60f262cb10555b69a7e45c4726054b42914fde53cc6480d61aa244ed"

@@ -42,6 +42,12 @@
       "id": "token-tracker-app",
       "repository": "H-i-m-s/token-tracker",
       "publisher": "H-i-m-s"
+    },
+    {
+      "kind": "app",
+      "id": "doc-intake",
+      "repository": "H-i-m-s/doc-intake",
+      "publisher": "H-i-m-s"
     }
   ]
 }
