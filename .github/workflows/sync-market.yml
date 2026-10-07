@@ -14,8 +14,6 @@ on:
       - approvals.json
       - scripts/extension-market-sync.mjs
       - .github/workflows/sync-market.yml
-  schedule:
-    - cron: "17 * * * *"
   workflow_dispatch:
 
 concurrency:
@@ -55,11 +53,11 @@ jobs:
         working-directory: trusted
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: node scripts/extension-market-sync.mjs --discover --registry ../candidate-registry.json --approvals ../candidate-approvals.json --previous index.v2.json --changed-from registry.json --out ../proposals.json
+        run: node scripts/extension-market-sync.mjs --discover --registry ../candidate-registry.json --approvals ../candidate-approvals.json --previous index.v2.json --changed-from registry.json
 
   generate:
     # Publication changes only when reviewed registry or approvals change on main.
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -87,7 +85,7 @@ jobs:
 
   publish:
     needs: generate
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -115,51 +113,3 @@ jobs:
           git add -- index.v2.json
           git commit -m "chore: synchronize market index"
           git push origin HEAD:main
-
-  discover:
-    # Discovery proposes approvals as pull requests; it never changes the index.
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          ref: main
-          # This job runs only trusted main code and pushes approval branches.
-          persist-credentials: true
-      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
-        with:
-          node-version: "24.15.0"
-      - name: Discover unapproved stable releases
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: node scripts/extension-market-sync.mjs --discover --registry registry.json --approvals approvals.json --previous index.v2.json --out "$RUNNER_TEMP/proposals.json"
-      - name: Open one approval pull request per release
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          base_sha="$(git rev-parse HEAD)"
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          count="$(jq length "$RUNNER_TEMP/proposals.json")"
-          for ((i = 0; i < count; i++)); do
-            jq ".[$i]" "$RUNNER_TEMP/proposals.json" > "$RUNNER_TEMP/proposal.json"
-            branch="$(jq -r .branch "$RUNNER_TEMP/proposal.json")"
-            title="$(jq -r .title "$RUNNER_TEMP/proposal.json")"
-            jq -r .body "$RUNNER_TEMP/proposal.json" > "$RUNNER_TEMP/proposal.md"
-            if ! git ls-remote --exit-code --heads origin "$branch" > /dev/null; then
-              git checkout -q -B "$branch" "$base_sha"
-              node scripts/extension-market-sync.mjs --apply-proposal "$RUNNER_TEMP/proposal.json" --approvals approvals.json
-              git add -- approvals.json
-              git commit -q -m "$title"
-              git push -q origin "HEAD:refs/heads/$branch"
-            fi
-            # A closed proposal stays closed; maintainers rejected those exact bytes.
-            if [ "$(gh pr list --head "$branch" --state all --json number --jq length)" = "0" ]; then
-              gh pr create --base main --head "$branch" --title "$title" --body-file "$RUNNER_TEMP/proposal.md"
-            fi
-          done

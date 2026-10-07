@@ -820,13 +820,6 @@ function readApprovals(raw, registrations) {
   }
   return approvals;
 }
-function applyApprovalProposal(raw, proposal) {
-  const pinned = readApprovalRecord(isPlainObject2(proposal) ? { kind: proposal.kind, id: proposal.id, tag: proposal.tag, sha256: proposal.sha256 } : proposal, "proposal");
-  const approvals = readApprovalList(raw).filter((record) => enrollmentKey(record) !== enrollmentKey(pinned));
-  approvals.push(pinned);
-  approvals.sort((a, b) => a.kind === b.kind ? a.id.localeCompare(b.id) : a.kind.localeCompare(b.kind));
-  return { schemaVersion: 1, approvals };
-}
 function parseJson(buffer, label) {
   try {
     return JSON.parse(buffer.toString("utf8"));
@@ -1100,62 +1093,6 @@ ${failures.map((failure) => `- ${failure}`).join("\n")}`);
   const unchanged = Boolean(previous && deepEqual(index, previous));
   return { index, unchanged, pending };
 }
-function capabilitiesOf(item) {
-  return [...new Set((item?.permissions || []).map((permission) => permission.capability))].sort();
-}
-function describePermissions(candidate, published) {
-  const next = capabilitiesOf(candidate);
-  if (!published) return next.length ? next.map((name) => `- \`${name}\``).join("\n") : "No declared permissions.";
-  const before = new Set(capabilitiesOf(published));
-  const after = new Set(next);
-  const lines = [
-    ...next.filter((name) => !before.has(name)).map((name) => `- Added \`${name}\``),
-    ...[...before].filter((name) => !after.has(name)).map((name) => `- Removed \`${name}\``)
-  ];
-  return lines.length ? lines.join("\n") : "No permission changes.";
-}
-function buildProposal(registration, tag, candidate, published) {
-  const repository = canonicalRepository(registration.repository);
-  const sha256 = candidate.archive.sha256;
-  const label = candidate.version === "0.0.0" ? `content ${sha256.slice(0, 12)}` : candidate.version;
-  const previousTag = publishedTag(published, registration.repository);
-  const previousLabel = published ? published.version === "0.0.0" ? `content ${published.archive.sha256.slice(0, 12)}` : published.version : "not published";
-  const rows = [
-    ["Extension", `\`${registration.kind}/${registration.id}\``],
-    ["Repository", repository],
-    ["Release", `${repository}/releases/tag/${encodeURIComponent(tag)}`],
-    ["Version", `\`${label}\` (published: \`${previousLabel}\`)`],
-    ["ZIP SHA-256", `\`${sha256}\``],
-    ["ZIP size", `${candidate.archive.size} bytes`],
-    ...previousTag && previousTag !== tag ? [["Source changes", `${repository}/compare/${encodeURIComponent(previousTag)}...${encodeURIComponent(tag)}`]] : []
-  ];
-  const body = [
-    "Release discovery found a stable release that is not approved yet. Merging this pull request approves exactly the ZIP below for the market index.",
-    "",
-    "| Field | Value |",
-    "| --- | --- |",
-    ...rows.map(([field, value]) => `| ${field} | ${value} |`),
-    "",
-    "### Permissions",
-    "",
-    describePermissions(candidate, published),
-    "",
-    "Review the release package before merging. Close this pull request to keep the published version unchanged.",
-    ""
-  ].join("\n");
-  return {
-    kind: registration.kind,
-    id: registration.id,
-    repository: registration.repository,
-    tag,
-    sha256,
-    version: candidate.version,
-    size: candidate.archive.size,
-    branch: `market-approval/${registration.kind}-${registration.id}-${sha256.slice(0, 12)}`,
-    title: `Approve ${registration.kind}/${registration.id} ${label}`,
-    body
-  };
-}
 async function discoverReleases({ registry, approvals, previousIndex = null, onlyChangedFrom = null, fetchImpl = fetch, token }) {
   const registrations = readRegistry(registry);
   const approved = readApprovals(approvals, registrations);
@@ -1172,7 +1109,7 @@ async function discoverReleases({ registry, approvals, previousIndex = null, onl
       if (!TAG_RE.test(tagName)) throw new Error(`release tag ${JSON.stringify(tagName)} must use only letters, digits, ".", "_", "+", or "-"`);
       const published = previousItems.get(enrollmentKey(registration));
       historyFor(published, candidate, registration);
-      proposals.push(buildProposal(registration, tagName, candidate, published));
+      proposals.push({ kind: registration.kind, id: registration.id, tag: tagName, sha256: candidate.archive.sha256, version: candidate.version });
     } catch (error) {
       skipped.push(`${registration.kind}/${registration.id} (${registration.repository}): ${error instanceof Error ? error.message : String(error)}`);
     }
@@ -1193,11 +1130,10 @@ function writeIndexAtomically(outPath, index) {
 }
 var USAGE = [
   "Usage: extension-market-sync --registry registry.json --approvals approvals.json --previous index.v2.json --out index.v2.json [--check]",
-  "       extension-market-sync --discover --registry registry.json --approvals approvals.json --previous index.v2.json --out proposals.json [--changed-from base-registry.json]",
-  "       extension-market-sync --apply-proposal proposal.json --approvals approvals.json"
+  "       extension-market-sync --discover --registry registry.json --approvals approvals.json --previous index.v2.json [--changed-from base-registry.json]"
 ].join("\n");
 function parseArgs(argv) {
-  const args = { registry: null, approvals: null, previous: null, out: null, check: false, discover: false, changedFrom: null, applyProposal: null };
+  const args = { registry: null, approvals: null, previous: null, out: null, check: false, discover: false, changedFrom: null };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     if (arg === "--registry") args.registry = argv[++i];
@@ -1207,10 +1143,9 @@ function parseArgs(argv) {
     else if (arg === "--check") args.check = true;
     else if (arg === "--discover") args.discover = true;
     else if (arg === "--changed-from") args.changedFrom = argv[++i];
-    else if (arg === "--apply-proposal") args.applyProposal = argv[++i];
     else throw new Error(`unknown argument ${arg}`);
   }
-  const valid = args.applyProposal ? args.approvals && !args.registry && !args.out && !args.discover && !args.check : args.registry && args.approvals && args.out && !(args.discover && args.check) && (args.discover || !args.changedFrom);
+  const valid = args.registry && args.approvals && (args.discover ? !args.out && !args.check : args.out && !args.changedFrom);
   if (!valid) throw new Error(USAGE);
   return args;
 }
@@ -1220,14 +1155,8 @@ function readJsonFile(file) {
 async function main() {
   try {
     const args = parseArgs(process.argv.slice(2));
-    if (args.applyProposal) {
-      const approvals = applyApprovalProposal(readJsonFile(args.approvals), readJsonFile(args.applyProposal));
-      writeIndexAtomically(path.resolve(args.approvals), approvals);
-      console.log(`extension-market-sync: pinned ${approvals.approvals.length} approval(s) in ${path.resolve(args.approvals)}`);
-      return;
-    }
-    const outPath = path.resolve(args.out);
-    const previousPath = args.previous ? path.resolve(args.previous) : args.discover ? null : outPath;
+    const outPath = args.discover ? null : path.resolve(args.out);
+    const previousPath = args.previous ? path.resolve(args.previous) : outPath;
     if (args.previous && !fs.existsSync(previousPath)) throw new Error(`--previous does not exist: ${previousPath}`);
     const registry = readJsonFile(args.registry);
     const approvalsDocument = readJsonFile(args.approvals);
@@ -1240,10 +1169,11 @@ async function main() {
         onlyChangedFrom: args.changedFrom ? readJsonFile(args.changedFrom) : null,
         token: process.env.GITHUB_TOKEN
       });
-      writeIndexAtomically(outPath, proposals);
-      for (const proposal of proposals) console.log(`extension-market-sync: proposal ${proposal.kind}/${proposal.id} tag=${proposal.tag} version=${proposal.version} sha256=${proposal.sha256}`);
+      for (const { version, ...approval } of proposals) {
+        console.log(`extension-market-sync: unapproved ${approval.kind}/${approval.id} version ${version}; approvals.json record: ${JSON.stringify(approval)}`);
+      }
       for (const failure of skipped) console.log(`extension-market-sync: skipped ${failure}`);
-      console.log(`extension-market-sync: ${proposals.length} proposal(s), ${skipped.length} skipped`);
+      console.log(`extension-market-sync: ${proposals.length} unapproved release(s), ${skipped.length} skipped`);
       if (args.changedFrom && skipped.length) process.exitCode = 1;
       return;
     }
@@ -1264,7 +1194,6 @@ if (process.argv[1] && fs.realpathSync(process.argv[1]) === fs.realpathSync(file
 export {
   MARKET_NAME,
   MARKET_SOURCE_ID,
-  applyApprovalProposal,
   discoverReleases,
   readApprovals,
   readRegistry,

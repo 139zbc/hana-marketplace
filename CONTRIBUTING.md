@@ -26,17 +26,17 @@ npm run pack:extension -- --kind app --dir /path/to/my-app \
 在登记的 GitHub 仓库创建正式 Release，并将上述两个文件同时上传为 Release 附件。仓库和附件必须可供市场自动化及用户访问。
 
 - Release 不能是草稿或预发布版本。
-- 自动发现读取 GitHub 的 **latest 正式 Release**，不是任意最新 tag。请确认 GitHub 选中的 Release 包含要投稿的扩展。
+- 市场只按 `approvals.json` 中登记的 tag 读取 Release，不会自动选用 latest Release。
 - Release tag 只能使用字母、数字、`.`、`_`、`+`、`-`，例如 `v1.2.0`。
 - App、Connector、Role、Bundle 的条目附件名为 `<kind>-<id>-<version>.entry.json`。
 - Skill、Recipe 的条目附件名为 `<kind>-<id>.entry.json`，ZIP 使用打包器生成的内容寻址文件名。
 - 每个登记项必须能匹配唯一的条目附件，且对应 ZIP 必须属于同一 Release。
 
-如果一个仓库有多条独立发布线，请确保 latest Release 适合已登记的扩展；市场不会猜测发布轨道。
-
 ### 3. 提交登记 PR
 
-Fork 本仓库，在 `registry.json` 的 `entries` 数组中追加一条记录，保留现有条目。例如：
+Fork 本仓库，同一个 PR 修改两个文件，保留现有条目。
+
+在 `registry.json` 的 `entries` 数组中追加登记记录，例如：
 
 ```json
 {
@@ -52,9 +52,26 @@ Fork 本仓库，在 `registry.json` 的 `entries` 数组中追加一条记录�
 }
 ```
 
-这里的 `entries` 仅为示例，不要覆盖真实目录。
+在 `approvals.json` 的 `approvals` 数组中追加要上架的安装包，例如：
+
+```json
+{
+  "schemaVersion": 1,
+  "approvals": [
+    {
+      "kind": "app",
+      "id": "example-app",
+      "tag": "v1.0.0",
+      "sha256": "<条目 JSON 中 archive.sha256 的值>"
+    }
+  ]
+}
+```
+
+这里的 `entries` 和 `approvals` 仅为示例，不要覆盖真实目录。
 
 - `kind`、`id` 和 `publisher` 必须与打包生成的条目一致。
+- `tag` 是包含条目 JSON 和 ZIP 的 Release tag；`sha256` 照抄条目 JSON 中的 `archive.sha256`，不要自行计算或修改。
 - `repository` 使用 `owner/repository`，不是完整 URL。
 - 除非维护者要求批量变更，一个 PR 只登记一个扩展。
 - **不要手工编辑 `index.v2.json`**，也不要为投稿修改同步器或工作流。
@@ -79,22 +96,29 @@ Fork 本仓库，在 `registry.json` 的 `entries` 数组中追加一条记录�
 可在市场仓库使用 Node.js 24.15.0 或兼容的 Node 24 运行只读检查，无需安装依赖：
 
 ```bash
-node scripts/extension-market-sync.mjs --discover --registry registry.json --approvals approvals.json --previous index.v2.json --out proposals.json
+# 下载 approvals.json 中登记的安装包，核对 SHA-256、身份和版本。
+node scripts/extension-market-sync.mjs --registry registry.json --approvals approvals.json --previous index.v2.json --out index.v2.json --check
+
+# 读取 latest 正式 Release，输出可直接填入 approvals.json 的记录。
+node scripts/extension-market-sync.mjs --discover --registry registry.json --approvals approvals.json --previous index.v2.json
 ```
 
-该命令读取 latest 正式 Release，校验条目和 ZIP，并输出待审核的 tag 与 SHA-256。检查需要联网读取 Release 和附件。可选的只读 `GITHUB_TOKEN` 可提高 GitHub API 限额；不要提交令牌。
+检查需要联网读取 Release 和附件。可选的只读 `GITHUB_TOKEN` 可提高 GitHub API 限额；不要提交令牌。
 
-PR 检查使用基线分支的同步器读取候选登记文件，不执行投稿代码。检查通过不等于审核通过，也不等于已经上架。
+PR 检查使用基线分支的同步器读取候选文件，不执行投稿代码。检查通过不等于审核通过，也不等于已经上架。
 
-**上架绑定到具体安装包。** 维护者审核时，在 `approvals.json` 中记录审核过的 Release tag 和 ZIP 的 SHA-256。目录只发布与批准记录完全一致的安装包，不会因为出现了新的 latest Release 就自动换包。批准合并后，发布工作流生成新的 `index.v2.json`，客户端才可发现新条目。`approvals.json` 由维护者管理，投稿 PR 不需要修改它。
+**上架绑定到具体安装包。** 目录只发布与 `approvals.json` 记录完全一致的安装包：按登记的 tag 读取 Release，ZIP 的 SHA-256 必须一致。维护者审核的就是这份安装包，合并 PR 即表示批准。合并后发布工作流生成新的 `index.v2.json`，客户端才可发现新条目。没有批准记录的登记不会上架。
 
 ### 5. 后续更新
 
-收录后，在同一仓库发布新的正式 Release，并同时上传新生成的条目和 ZIP。**每次更新都需要维护者审核**，但作者通常不必自己提 PR：
+**每次更新都需要提交 PR 并经维护者审核**，市场不会自动发现或上架新版本：
 
-- 工作流每小时检查已登记仓库的 latest 正式 Release。发现未批准的安装包时，会自动开一个批准 PR，列出 tag、版本、SHA-256、大小、权限变化和源码对比链接。实际执行时间取决于 GitHub Actions 调度。
-- 维护者审核并合并批准 PR 后，新版本才会上架。关闭批准 PR 表示拒绝这份安装包，已上架版本保持不变。
-- 登记信息（如仓库或发布者）变化时仍需作者提 PR。
+1. 在同一仓库发布新的正式 Release，同时上传新生成的条目和 ZIP。
+2. 提交 PR，把 `approvals.json` 中本扩展的 `tag` 和 `sha256` 改为新 Release 的值。
+3. 在 PR 中说明本次更新的内容和权限变化，并附上自测结果。
+4. 维护者审核并合并后，新版本才会上架；合并前用户看到的仍是旧版本。
+
+- 登记信息（如仓库或发布者）变化时，同样在 PR 中修改 `registry.json`。
 - 对有语义化版本的扩展，请发布更高版本；不要降级，也不要用新安装包替换已发布的同一版本。
 - Skill / Recipe 按内容哈希更新，条目中的 `0.0.0` 不需要人为递增。
 - 上架后修改、替换或删除 Release 附件，不会改变用户安装到的内容：客户端按批准的 SHA-256 校验下载，不一致或附件缺失时安装直接失败。
@@ -104,11 +128,11 @@ PR 检查使用基线分支的同步器读取候选登记文件，不执行投�
 
 | 现象 | 应检查的内容 |
 | --- | --- |
-| 找不到可用 Release | 是否仍为草稿或预发布；GitHub latest 是否指向预期 Release；tag 是否只含允许的字符 |
+| 找不到可用 Release | `approvals.json` 中的 tag 是否存在；是否仍为草稿或预发布；tag 是否只含允许的字符 |
 | 找不到条目或 ZIP | 是否同时上传两个打包产物；附件名称和登记身份是否一致 |
-| 身份或完整性校验失败 | `kind`、`id`、发布者、大小和 SHA-256 是否与原始打包产物一致 |
+| 身份或完整性校验失败 | `kind`、`id`、发布者、大小和 SHA-256 是否与原始打包产物一致；`approvals.json` 中的 `sha256` 是否照抄自条目 JSON |
 | 版本更新被拒绝 | 是否版本倒退，或替换了同一版本的安装包 |
-| 登记已合并但目录没有条目 | 是否已有对应的批准记录；批准 PR 是否已合并 |
+| 登记已合并但目录没有条目 | `approvals.json` 中是否已有对应记录 |
 | 已批准但目录没更新 | 查看发布 Actions 是否成功；合并本身不是发布成功的证明 |
 
 发布采用**整批原子更新**：本次新批准的安装包任一校验失败，整批都不会发布，原索引保持不变。批准记录未变的已上架条目不会重新下载，作者删除旧附件不会阻断其他条目。根据日志定位具体失败项，修复 Release 或调整批准记录，再由维护者重跑；不要删除无关条目来绕过检查。
@@ -136,7 +160,7 @@ Keep the generated `.entry.json` and matching `.zip` together. Do not alter thei
 
 Upload both generated files as assets of a stable Release in the repository you will register. The repository and assets must be accessible to market automation and users. Drafts and prereleases are not eligible.
 
-Discovery selects GitHub's **latest stable Release**, not an arbitrary newest tag. Ensure that release contains the intended extension, especially if the repository has multiple independent release tracks. Release tags may contain only letters, digits, `.`, `_`, `+`, and `-`, for example `v1.2.0`.
+The market reads only the Release tag recorded in `approvals.json`; it never selects the latest Release automatically. Release tags may contain only letters, digits, `.`, `_`, `+`, and `-`, for example `v1.2.0`.
 
 - Apps, connectors, roles, and bundles: `<kind>-<id>-<version>.entry.json`.
 - Skills and recipes: `<kind>-<id>.entry.json`, with the packer-generated content-addressed ZIP filename.
@@ -144,7 +168,9 @@ Discovery selects GitHub's **latest stable Release**, not an arbitrary newest ta
 
 ### 3. Open an enrollment PR
 
-Fork this repository and append one record to the `entries` array in `registry.json`, preserving existing records. Example record:
+Fork this repository and change two files in the same PR, preserving existing records.
+
+Append an enrollment to the `entries` array in `registry.json`. Example record:
 
 ```json
 {
@@ -155,7 +181,18 @@ Fork this repository and append one record to the `entries` array in `registry.j
 }
 ```
 
-The registry keeps `schemaVersion: 1`. The kind, id, and publisher must match the packer output. Use `owner/repository`, not a full URL. Submit one enrollment per PR unless maintainers request a batch.
+Append the package to publish to the `approvals` array in `approvals.json`. Example record:
+
+```json
+{
+  "kind": "app",
+  "id": "example-app",
+  "tag": "v1.0.0",
+  "sha256": "<archive.sha256 from the entry JSON>"
+}
+```
+
+Both files keep `schemaVersion: 1`. The kind, id, and publisher must match the packer output. Use `owner/repository`, not a full URL. `tag` is the Release that contains the entry JSON and ZIP; copy `sha256` from `archive.sha256` in the entry JSON instead of computing or editing it. Submit one enrollment per PR unless maintainers request a batch.
 
 Complete the review materials in the [PR template](.github/PULL_REQUEST_TEMPLATE.md). **Do not edit `index.v2.json` manually** or change the synchronizer or workflows as part of an enrollment.
 
@@ -178,28 +215,35 @@ Maintainers can see the images in the PR body; GitHub's PR list does not automat
 With Node.js 24.15.0 or a compatible Node 24 release, run this read-only check from the market repository. No dependency installation is required:
 
 ```bash
-node scripts/extension-market-sync.mjs --discover --registry registry.json --approvals approvals.json --previous index.v2.json --out proposals.json
+# Download the packages recorded in approvals.json and verify SHA-256, identity, and version.
+node scripts/extension-market-sync.mjs --registry registry.json --approvals approvals.json --previous index.v2.json --out index.v2.json --check
+
+# Read the latest stable Release and print a record ready for approvals.json.
+node scripts/extension-market-sync.mjs --discover --registry registry.json --approvals approvals.json --previous index.v2.json
 ```
 
-This reads the latest stable Release, validates the entry and ZIP, and prints the tag and SHA-256 awaiting review. The check needs network access to releases and assets. An optional read-only `GITHUB_TOKEN` raises the API rate limit; never commit it.
+The check needs network access to releases and assets. An optional read-only `GITHUB_TOKEN` raises the API rate limit; never commit it.
 
 PR validation uses the base branch's synchronizer and does not execute submitted code. Passing checks does not replace maintainer review.
 
-**Publication is bound to an exact package.** During review, maintainers record the reviewed Release tag and ZIP SHA-256 in `approvals.json`. The catalog publishes only packages that match an approval exactly; a newer latest Release never replaces a package automatically. After the approval is merged, the publishing workflow must update `index.v2.json` before clients can discover the extension. Maintainers manage `approvals.json`; enrollment PRs do not change it.
+**Publication is bound to an exact package.** The catalog publishes only packages that match a record in `approvals.json` exactly: the recorded Release tag is read and the ZIP SHA-256 must match. Maintainers review that package, and merging the PR approves it. The publishing workflow must then update `index.v2.json` before clients can discover the extension. Enrollments without an approval record are not listed.
 
 ### 5. Publish updates
 
-Publish a new stable Release in the same repository with both newly generated assets. **Every update requires maintainer review**, but authors normally do not open the PR themselves:
+**Every update requires a PR and maintainer review.** The market does not discover or publish new versions automatically:
 
-- An hourly workflow checks the latest stable Release of each enrolled repository. For an unapproved package, it opens an approval PR listing the tag, version, SHA-256, size, permission changes, and a source comparison link. GitHub Actions scheduling may delay execution.
-- The new version is published only after maintainers review and merge the approval PR. Closing it rejects that package and keeps the published version.
-- Changes to registration details, such as repository or publisher, still require an author PR.
+1. Publish a new stable Release in the same repository with both newly generated assets.
+2. Open a PR that changes this extension's `tag` and `sha256` in `approvals.json` to the new Release.
+3. Describe the changes and any permission changes in the PR, and include your test results.
+4. The new version is published only after maintainers review and merge the PR. Until then, users keep seeing the published version.
+
+- To change registration details, such as repository or publisher, edit `registry.json` in the PR as well.
 - Versioned extensions must not downgrade or replace an existing version's archive. Skills and recipes update by content hash and retain `0.0.0` in their entry metadata.
 - Changing, replacing, or deleting Release assets after publication does not change what users install. Clients verify downloads against the approved SHA-256; a mismatched or missing asset fails installation.
 - Catalog updates never install or update extensions automatically for users.
 
 ### Troubleshooting
 
-Check the selected latest Release, stable status, tag characters, asset names, matching identity and publisher, byte count, SHA-256, and version progression. A merged enrollment is listed only after its approval is merged. A merged PR is not proof of a successful publication; inspect publishing Actions when an entry does not appear.
+Check that the tag in `approvals.json` exists and is stable, the tag characters, asset names, matching identity and publisher, byte count, SHA-256 copied from the entry JSON, and version progression. An enrollment is listed only when `approvals.json` has its record. A merged PR is not proof of a successful publication; inspect publishing Actions when an entry does not appear.
 
 Publication is **atomic across the entire batch**. If any newly approved package fails validation, the new index is not published and the previous index stays unchanged. Published entries whose approval did not change are not downloaded again, so a deleted old asset does not block other entries. Identify the failing record in the logs, fix its Release or the approval, then ask a maintainer to rerun publication. Do not remove unrelated entries to bypass validation.
