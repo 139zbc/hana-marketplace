@@ -3,6 +3,12 @@
   "approvals": [
     {
       "kind": "app",
+      "id": "answer-choice",
+      "tag": "v0.1.1",
+      "sha256": "c12105e72c357bcc5ebb2829224466d1cc67ef476a3d0eaf934c94d237168479"
+    },
+    {
+      "kind": "app",
       "id": "session-porter",
       "tag": "v0.3.2",
       "sha256": "eb97065722063fdc89ca7e250dcad7cb33978b6a5c76d74fd9d05a91658f7975"

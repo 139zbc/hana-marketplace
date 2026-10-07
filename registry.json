@@ -18,6 +18,12 @@
       "id": "session-porter",
       "repository": "Hzl0929/Hana-Session-Porter",
       "publisher": "Hzl0929"
+    },
+    {
+      "kind": "app",
+      "id": "answer-choice",
+      "repository": "youyongdemao/HanaAgent-answer-choice",
+      "publisher": "Swimming Cat"
     }
   ]
 }
