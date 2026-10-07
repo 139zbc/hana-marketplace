@@ -30,6 +30,12 @@
       "id": "prompt-optimizer",
       "repository": "youyongdemao/HanaAgent-prompt-optimizer",
       "publisher": "Swimming Cat"
+    },
+    {
+      "kind": "app",
+      "id": "git-save-load",
+      "repository": "H-i-m-s/git-save-load",
+      "publisher": "H-i-m-s"
     }
   ]
 }

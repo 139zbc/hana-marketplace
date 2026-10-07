@@ -9,6 +9,12 @@
     },
     {
       "kind": "app",
+      "id": "git-save-load",
+      "tag": "v3.2.0",
+      "sha256": "d8379d4f60f262cb10555b69a7e45c4726054b42914fde53cc6480d61aa244ed"
+    },
+    {
+      "kind": "app",
       "id": "prompt-optimizer",
       "tag": "v1.0.0",
       "sha256": "4fbf74c0c35ed9be7f2fa45da864c45c897c5388b00485296dd859db0c53766e"
