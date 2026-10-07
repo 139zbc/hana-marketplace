@@ -34,7 +34,7 @@ function isCapabilityName(value) {
 
 // shared/extension-market-index.ts
 var MARKET_INDEX_SCHEMA_VERSION = 2;
-var MAX_MARKET_ARCHIVE_BYTES = 50 * 1024 * 1024;
+var MAX_MARKET_ARCHIVE_BYTES = 300 * 1024 * 1024;
 function isPlainObject(value) {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
@@ -174,34 +174,375 @@ function validateMarketIndexV2(raw) {
 }
 
 // shared/log-redactor.ts
+var REDACTED = "[redacted]";
 var SECRET_KEY_PATTERN = "api[_-]?key|apikey|api-key|secret[_-]?key|secret|access[_-]?token|refresh[_-]?token|auth[_-]?token|token|password|passwd|client[_-]?secret|bot[_-]?token|server[_-]?token";
 var SECRET_ASSIGN_RE = new RegExp(`\\b(${SECRET_KEY_PATTERN})\\b\\s*[:=]\\s*(?:"[^"]*"|'[^']*'|[^\\s,"'\\]}]+)`, "gi");
+var SENSITIVE_OBJECT_KEY_RE = /^(api[_-]?key|apikey|api-key|authorization|cookie|set-cookie|secret[_-]?key|secret|access[_-]?token|refresh[_-]?token|auth[_-]?token|token|password|passwd|client[_-]?secret|bot[_-]?token|server[_-]?token|private[_-]?key|credential|credentials|session[_-]?key|session[_-]?id|user[_-]?id|chat[_-]?id|sender[_-]?name|avatar[_-]?url|owner|download[_-]?param|filekey)$/i;
+var URL_SECRET_QUERY_RE = /([?&](?:token|access_token|refresh_token|auth|authorization|api_key|apikey|api-key|key|secret|password|client_secret|code|appSurfaceSession|appIframeTicket)=)([^&#\s]+)/gi;
+var APP_UI_SURFACE_TOKEN_RE = /(\/api\/apps\/[^/\s?#]+\/(?:ui|routes\/_runtime\/[^/\s?#]+)\/_surface\/)([^/\s?#]+)(?=\/)/gi;
+var ENCODED_APP_UI_SURFACE_TOKEN_RE = /(%2Fapi%2Fapps%2F[^%&\s]+%2F(?:ui|routes%2F_runtime%2F[^%&\s]+)%2F_surface%2F)([^%&\s]+)(?=%2F)/gi;
+var API_KEY_VALUE_RE = /\b(sk-[a-zA-Z0-9_-]{20,}|AKIA[A-Z0-9]{16}|gsk_[a-zA-Z0-9_-]{20,}|ghp_[a-zA-Z0-9]{36}|glpat-[a-zA-Z0-9_-]{20,}|xox[abpors]-[a-zA-Z0-9-]+)\b/g;
+var EMAIL_RE = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
+var CREDIT_CARD_RE = /\b(?:\d{4}[- ]?){3}\d{4}\b/g;
+var CN_ID_CARD_RE = /\b\d{6}(?:19|20)\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])\d{3}[\dXx]\b/g;
+var SSN_RE = /\b\d{3}-\d{2}-\d{4}\b/g;
+var LONG_RANDOM_RE = /(^|[^\w/.-])([A-Za-z0-9+/_=-]{40,})(?=$|[^\w/.-])/g;
+function redactLogText(value, options = {}) {
+  if (value == null) return "";
+  let text = String(value);
+  text = redactKnownPaths(text, options);
+  text = text.replace(/data:([^;,]+);base64,[A-Za-z0-9+/=]+/gi, "data:$1;base64,[redacted]");
+  text = text.replace(/(https?:\/\/)([^:@\s/?#]+):([^@\s/?#]+)@/gi, "$1[credentials]@");
+  text = text.replace(URL_SECRET_QUERY_RE, "$1[redacted]");
+  text = text.replace(APP_UI_SURFACE_TOKEN_RE, "$1[redacted]");
+  text = text.replace(ENCODED_APP_UI_SURFACE_TOKEN_RE, "$1[redacted]");
+  text = text.replace(/\b(Authorization\s*[:=]\s*Bearer\s+)[^\s,;]+/gi, "$1[redacted]");
+  text = text.replace(/\b(Bearer\s+)[A-Za-z0-9\-._~+/]+=*/gi, "$1[redacted]");
+  text = text.replace(/\b(Cookie|Set-Cookie)\s*[:=]\s*[^\r\n]+/gi, "$1=[redacted]");
+  text = text.replace(SECRET_ASSIGN_RE, (_m, key) => `${key}=[redacted]`);
+  text = text.replace(API_KEY_VALUE_RE, REDACTED);
+  text = text.replace(CREDIT_CARD_RE, "[credit_card]");
+  text = text.replace(CN_ID_CARD_RE, "[id_card]");
+  text = text.replace(SSN_RE, "[ssn]");
+  text = text.replace(EMAIL_RE, "[email]");
+  text = text.replace(LONG_RANDOM_RE, "$1[token]");
+  return text;
+}
+function redactKnownPaths(text, options) {
+  let out = text;
+  const paths = [];
+  if (options.homeDir) paths.push([options.homeDir, "~"]);
+  if (Array.isArray(options.extraPaths)) {
+    for (const p of options.extraPaths) paths.push([p, "[path]"]);
+  }
+  for (const [rawPath, replacement] of paths) {
+    if (!rawPath || typeof rawPath !== "string") continue;
+    const variants = pathVariants(rawPath);
+    for (const variant of variants) {
+      out = out.split(variant).join(replacement);
+      if (variant.startsWith("/")) {
+        out = out.split(`file://${variant}`).join(`file://${replacement}`);
+      }
+    }
+  }
+  out = out.replace(/file:\/\/\/Users\/[^/\s]+/g, "file:///Users/[user]");
+  out = out.replace(/\/Users\/[^/\s]+/g, "/Users/[user]");
+  out = out.replace(/file:\/\/\/home\/[^/\s]+/g, "file:///home/[user]");
+  out = out.replace(/\/home\/[^/\s]+/g, "/home/[user]");
+  out = out.replace(/\b([A-Za-z]:\\Users\\)[^\\/\s]+/g, "$1[user]");
+  out = out.replace(/\b([A-Za-z]:\/Users\/)[^\\/\s]+/g, "$1[user]");
+  return out;
+}
+function pathVariants(rawPath) {
+  const variants = /* @__PURE__ */ new Set([rawPath]);
+  if (rawPath.includes("\\")) variants.add(rawPath.replace(/\\/g, "/"));
+  if (rawPath.includes("/")) variants.add(rawPath.replace(/\//g, "\\"));
+  return variants;
+}
+function redactLogValue(value, options = {}, state = {}) {
+  const depth = state.depth || 0;
+  const seen = state.seen || /* @__PURE__ */ new WeakSet();
+  if (value == null) return value;
+  if (typeof value === "string") return redactLogText(value, options);
+  if (typeof value === "number" || typeof value === "boolean" || typeof value === "bigint") return value;
+  if (typeof value === "symbol" || typeof value === "function") return redactLogText(String(value), options);
+  if (value instanceof Error) {
+    const errCode = value.code;
+    return {
+      name: value.name,
+      message: redactLogText(value.message, options),
+      stack: value.stack ? redactLogText(value.stack, options) : void 0,
+      code: errCode ? redactLogText(String(errCode), options) : void 0
+    };
+  }
+  if (typeof value !== "object") return redactLogText(String(value), options);
+  if (seen.has(value)) return "[Circular]";
+  if (depth >= 8) return "[MaxDepth]";
+  seen.add(value);
+  if (Array.isArray(value)) {
+    return value.map((item) => redactLogValue(item, options, { depth: depth + 1, seen }));
+  }
+  const out = {};
+  for (const [key, item] of Object.entries(value)) {
+    const cleanKey = redactLogLabel(key);
+    if (SENSITIVE_OBJECT_KEY_RE.test(key)) {
+      out[cleanKey] = REDACTED;
+    } else {
+      out[cleanKey] = redactLogValue(item, options, { depth: depth + 1, seen });
+    }
+  }
+  return out;
+}
+function redactLogLabel(value) {
+  return redactLogText(value == null ? "unknown" : String(value)).replace(/[^a-zA-Z0-9_.:-]+/g, "_").slice(0, 80) || "unknown";
+}
+
+// lib/log-arguments.ts
+var MAX_STRING_CHARS = 4096;
+var MAX_TOTAL_CHARS = 8192;
+var MAX_DEPTH = 5;
+var MAX_ARRAY_ITEMS = 50;
+var MAX_OBJECT_KEYS = 50;
+var MAX_NODES = 200;
+var MAX_CAUSE_DEPTH = 3;
+var LOG_FORMAT_FALLBACK = "[log arguments unavailable]";
+function boundString(value) {
+  if (value.length <= MAX_STRING_CHARS) return value;
+  return `${value.slice(0, MAX_STRING_CHARS)}\u2026[truncated]`;
+}
+function collapseWhitespace(value) {
+  return value.replace(/\s+/g, " ").trim();
+}
+function constructorName(value) {
+  try {
+    const name = value.constructor?.name;
+    return typeof name === "string" && name ? name : "Object";
+  } catch {
+    return "Object";
+  }
+}
+function functionName(value) {
+  try {
+    return typeof value.name === "string" && value.name ? value.name : "anonymous";
+  } catch {
+    return "anonymous";
+  }
+}
+function readPlainField(target, key) {
+  try {
+    let owner = target;
+    while (owner) {
+      const descriptor = Object.getOwnPropertyDescriptor(owner, key);
+      if (descriptor) {
+        if (typeof descriptor.get === "function") return void 0;
+        return descriptor.value;
+      }
+      owner = Object.getPrototypeOf(owner);
+    }
+    return void 0;
+  } catch {
+    return void 0;
+  }
+}
+function toText(value) {
+  if (typeof value === "string") return value;
+  if (value === void 0 || value === null) return "";
+  return boundString(String(value));
+}
+function codeText(value) {
+  if (typeof value === "string") return boundString(value);
+  if (typeof value === "bigint") return `${value}n`;
+  if (value === null) return "null";
+  if (typeof value === "object") return "[object]";
+  return String(value);
+}
+function renderError(error, budget, seenCauses) {
+  const name = toText(readPlainField(error, "name")) || "Error";
+  const message = toText(readPlainField(error, "message"));
+  let text = message ? `${name}: ${message}` : name;
+  const code = readPlainField(error, "code");
+  if (code !== void 0 && code !== null && code !== "") {
+    text += ` (code=${codeText(code)})`;
+  }
+  const causes = [];
+  let cause = readPlainField(error, "cause");
+  let depth = 0;
+  while (cause !== void 0 && cause !== null) {
+    if (depth >= MAX_CAUSE_DEPTH) {
+      causes.push("[cause depth exceeded]");
+      break;
+    }
+    if (typeof cause === "object" && seenCauses.has(cause)) {
+      causes.push("[circular cause]");
+      break;
+    }
+    if (cause instanceof Error) {
+      seenCauses.add(cause);
+      const causeName = toText(readPlainField(cause, "name")) || "Error";
+      const causeMessage = toText(readPlainField(cause, "message"));
+      causes.push(causeMessage ? `${causeName}: ${causeMessage}` : causeName);
+      cause = readPlainField(cause, "cause");
+    } else {
+      causes.push(boundString(literal(renderValue(cause, budget, 0, /* @__PURE__ */ new Set()))));
+      break;
+    }
+    depth += 1;
+  }
+  if (causes.length) text += ` <- Caused by: ${causes.join(" <- ")}`;
+  return collapseWhitespace(text);
+}
+function renderValue(value, budget, depth, path2) {
+  if (budget.nodes <= 0) return "[budget exceeded]";
+  budget.nodes -= 1;
+  if (value === null) return null;
+  if (value === void 0) return "undefined";
+  switch (typeof value) {
+    case "string":
+      return boundString(value);
+    case "number":
+      return Number.isFinite(value) ? value : String(value);
+    case "boolean":
+      return value;
+    case "bigint":
+      return `${value}n`;
+    case "symbol":
+      return String(value);
+    case "function":
+      return `[Function: ${functionName(value)}]`;
+    default:
+      break;
+  }
+  if (value instanceof Error) return renderError(value, budget, /* @__PURE__ */ new Set([value]));
+  const object = value;
+  if (path2.has(object)) return "[Circular]";
+  if (depth >= MAX_DEPTH) return `[${constructorName(object)}]`;
+  if (Array.isArray(object)) {
+    path2.add(object);
+    const items = Array.from(object);
+    const shown = items.slice(0, MAX_ARRAY_ITEMS).map((item) => renderValue(item, budget, depth + 1, path2));
+    if (items.length > MAX_ARRAY_ITEMS) {
+      shown.push(`\u2026 (+${items.length - MAX_ARRAY_ITEMS} more)`);
+    }
+    path2.delete(object);
+    return shown;
+  }
+  if (object instanceof Map) {
+    path2.add(object);
+    const entries = Array.from(object.entries());
+    const shown = entries.slice(0, MAX_OBJECT_KEYS).map(
+      ([key, item]) => `${literal(renderValue(key, budget, depth + 1, path2))} => ${literal(renderValue(item, budget, depth + 1, path2))}`
+    );
+    if (entries.length > MAX_OBJECT_KEYS) {
+      shown.push(`\u2026 (+${entries.length - MAX_OBJECT_KEYS} more)`);
+    }
+    path2.delete(object);
+    return `[Map ${shown.join(", ")}]`;
+  }
+  if (object instanceof Set) {
+    path2.add(object);
+    const items = Array.from(object.values());
+    const shown = items.slice(0, MAX_OBJECT_KEYS).map((item) => literal(renderValue(item, budget, depth + 1, path2)));
+    if (items.length > MAX_OBJECT_KEYS) {
+      shown.push(`\u2026 (+${items.length - MAX_OBJECT_KEYS} more)`);
+    }
+    path2.delete(object);
+    return `[Set ${shown.join(", ")}]`;
+  }
+  let keys;
+  try {
+    keys = Object.keys(object);
+  } catch {
+    return `[${constructorName(object)}]`;
+  }
+  path2.add(object);
+  const out = {};
+  const limit = Math.min(keys.length, MAX_OBJECT_KEYS);
+  for (let index = 0; index < limit; index += 1) {
+    if (budget.nodes <= 0) {
+      out["\u2026"] = "[budget exceeded]";
+      break;
+    }
+    const key = keys[index];
+    let descriptor;
+    try {
+      descriptor = Object.getOwnPropertyDescriptor(object, key);
+    } catch {
+      descriptor = void 0;
+    }
+    out[key] = descriptor && typeof descriptor.get === "function" ? "[Getter]" : renderValue(descriptor ? descriptor.value : void 0, budget, depth + 1, path2);
+  }
+  if (keys.length > limit) out["\u2026"] = `(+${keys.length - limit} more)`;
+  path2.delete(object);
+  return out;
+}
+function literal(value) {
+  return typeof value === "string" ? value : safeStringify(value);
+}
+function safeStringify(value) {
+  try {
+    const text = JSON.stringify(value);
+    return text === void 0 ? String(value) : text;
+  } catch {
+    return "[unserializable]";
+  }
+}
+function boundText(text, max) {
+  if (text.length <= max) return text;
+  return `${text.slice(0, max)}\u2026[truncated]`;
+}
+function formatLogArguments(args, options = {}) {
+  try {
+    if (args == null) return "";
+    const list = Array.from(args);
+    const budget = { nodes: MAX_NODES };
+    const parts = [];
+    let used = 0;
+    for (const arg of list) {
+      let piece;
+      try {
+        const safe = renderValue(arg, budget, 0, /* @__PURE__ */ new Set());
+        const redacted = redactLogValue(safe, options);
+        piece = typeof redacted === "string" ? redacted : safeStringify(redacted);
+      } catch {
+        piece = "[unprintable argument]";
+      }
+      parts.push(piece);
+      used += piece.length + 1;
+      if (used >= MAX_TOTAL_CHARS) {
+        parts.push("\u2026[truncated]");
+        break;
+      }
+    }
+    const joined = parts.join(" ");
+    return boundText(redactLogText(joined, options), MAX_TOTAL_CHARS);
+  } catch {
+    return LOG_FORMAT_FALLBACK;
+  }
+}
 
 // lib/debug-log.ts
 var DEFAULT_MAX_BYTES = 5 * 1024 * 1024;
 var DEFAULT_MAX_LINE_BYTES = 64 * 1024;
 var _sink = null;
+var _sinkFailureReported = false;
 function route(type, module, msg) {
   const sink = _sink;
   if (!sink) return;
-  sink.write(type, module || "unknown", String(msg));
+  try {
+    sink.write(type, module || "unknown", String(msg));
+  } catch (err) {
+    if (!_sinkFailureReported) {
+      _sinkFailureReported = true;
+      try {
+        console.warn(`[debug-log] sink write failed; further failures will be silent: ${err?.message || err}`);
+      } catch {
+      }
+    }
+  }
 }
 function createModuleLogger(module) {
-  const info = (msg) => {
-    console.log(`[${module}] ${msg}`);
-    route("info", module, msg);
+  const write = (level, args) => {
+    let text;
+    try {
+      text = formatLogArguments(args);
+    } catch {
+      text = LOG_FORMAT_FALLBACK;
+    }
+    const line = `[${module}] ${text}`;
+    try {
+      if (level === "error") console.error(line);
+      else if (level === "warn") console.warn(line);
+      else console.log(line);
+    } catch {
+    }
+    route(level, module, text);
   };
+  const info = (...args) => write("info", args);
   return {
     log: info,
     info,
-    warn(msg) {
-      console.warn(`[${module}] ${msg}`);
-      route("warn", module, msg);
-    },
-    error(msg) {
-      console.error(`[${module}] ${msg}`);
-      route("error", module, msg);
-    }
+    warn: (...args) => write("warn", args),
+    error: (...args) => write("error", args)
   };
 }
 
