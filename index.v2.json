@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "sourceId": "official-global",
   "name": "Hana Global Market",
-  "publishedAt": "2026-10-07T14:40:35.142Z",
+  "publishedAt": "2026-10-07T14:42:07.253Z",
   "items": [
     {
       "kind": "app",
@@ -48,6 +48,45 @@
         "format": "zip"
       },
       "repository": "https://github.com/youyongdemao/HanaAgent-answer-choice"
+    },
+    {
+      "kind": "app",
+      "id": "git-save-load",
+      "name": "Git Save/Load",
+      "publisher": "H-i-m-s",
+      "description": "Git 存档与读档。一键存档、版本历史浏览、分支管理、GitHub 仓库与 PR 管理、带二次确认的远程覆盖推送；为模型提供 git / gh 工具（含子命令透传与 PR 生命周期），并支持隔离 GPG 签名提交与加密存放的 GitHub 令牌。",
+      "version": "3.2.0",
+      "permissions": [
+        {
+          "capability": "app/process.spawn"
+        },
+        {
+          "capability": "app/tools.expose-to-model"
+        },
+        {
+          "capability": "app/ui.open-external"
+        },
+        {
+          "capability": "app/ui.clipboard-write"
+        },
+        {
+          "capability": "app/resources.read"
+        },
+        {
+          "capability": "app/resources.write"
+        }
+      ],
+      "compatibility": {
+        "minAppVersion": "0.978.0"
+      },
+      "archive": {
+        "url": "https://github.com/H-i-m-s/git-save-load/releases/download/v3.2.0/git-save-load-v3.2.0.zip",
+        "sha256": "d8379d4f60f262cb10555b69a7e45c4726054b42914fde53cc6480d61aa244ed",
+        "size": 3100085,
+        "format": "zip"
+      },
+      "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiI+CiAgPHRpdGxlPkdpdCBTYXZlL0xvYWQ8L3RpdGxlPgogIDwhLS0g5aSW5ZyI77ya5byA5Y+j5ZyG5byn77yM5Lik56uv6YO95piv5ZyG6KeS5pS25Y+jCiAgICAgICDlnIblv4MgKDI1NS41LDI1NS41Ke+8jOWkluWNiuW+hCAxNjkuNeOAgeWGheWNiuW+hCAxMzQuNe+8jOeOr+WOmiAzNQogICAgICAg5LiK56uvIM64PTUzLjXCsO+8jOS4i+erryDOuD0tMTEuM8Kw77yI5Y2z5Y6f5p2l5LiJ6KeS5b2i5bqV6L655Lit54K56YKj5p2h5Y2K5b6E5LiK77yJCiAgICAgICDkuKTnq6/mlLblj6PlnYfkuLrljYrlvoQgMTcuNSDnmoTljYrlnIYgLS0+CiAgPHBhdGggZmlsbD0iIzZEOEJFNSIgZD0iTTM1Ni4zIDExOS4yCiAgICBBMTY5LjUgMTY5LjUgMCAxIDAgNDIxLjcgMjg4LjcKICAgIEExNy41IDE3LjUgMCAwIDAgMzg3LjQgMjgxLjkKICAgIEExMzQuNSAxMzQuNSAwIDEgMSAzMzUuNSAxNDcuNAogICAgQTE3LjUgMTcuNSAwIDAgMCAzNTYuMyAxMTkuMiBaIi8+CiAgPCEtLSDlhoXoiq/vvJo0NcKwIOWchuinkuaWueWdl++8jOWNiui+uemVvyA2Me+8jOWchuinkiAyMu+8iOWNiuWvueinkiA3Ny4y77yJIC0tPgogIDxyZWN0IHg9IjE5NC41IiB5PSIxOTQuNSIgd2lkdGg9IjEyMiIgaGVpZ2h0PSIxMjIiIHJ4PSIyMiIgcnk9IjIyIgogICAgICAgIGZpbGw9IiM3OUMwRkYiIHRyYW5zZm9ybT0icm90YXRlKDQ1IDI1NS41IDI1NS41KSIvPgo8L3N2Zz4K",
+      "repository": "https://github.com/H-i-m-s/git-save-load"
     },
     {
       "kind": "app",
