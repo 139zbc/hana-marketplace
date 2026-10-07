@@ -60,6 +60,12 @@
       "id": "video-summarizer",
       "tag": "v1.2.0",
       "sha256": "b285d7c8537b1cf45ee2c70acfbfb26fe2b9757eea043f353416cad82643ebf0"
+    },
+    {
+      "kind": "app",
+      "id": "dshana",
+      "tag": "v1.0.1+dsh-0.2.0-rc.2",
+      "sha256": "c9365b2cfb798da8f5b83bd36e370f7a60c256edf53ba708b81fd8704a28e383"
     }
   ]
 }
