@@ -36,6 +36,12 @@
       "id": "git-save-load",
       "repository": "H-i-m-s/git-save-load",
       "publisher": "H-i-m-s"
+    },
+    {
+      "kind": "app",
+      "id": "token-tracker-app",
+      "repository": "H-i-m-s/token-tracker",
+      "publisher": "H-i-m-s"
     }
   ]
 }
