@@ -8,6 +8,12 @@
       "publisher": "liliMozi"
     },
     {
+      "kind": "recipe",
+      "id": "ask-user-cards",
+      "repository": "liliMozi/ask-user-cards",
+      "publisher": "liliMozi"
+    },
+    {
       "kind": "skill",
       "id": "video-summarizer",
       "repository": "youyongdemao/video-summarizer",
