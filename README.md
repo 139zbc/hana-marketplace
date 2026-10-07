@@ -5,6 +5,13 @@ not run submitted code or build submitted projects. The generated
 `index.v2.json` only points Hana clients at ZIP files that were checked against
 the matching entry metadata and GitHub Release asset.
 
+## Contributing / 投稿
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the Chinese and English submission
+guide: packaging, stable Releases, enrollment PRs, review, updates, and troubleshooting.
+
+投稿前请阅读[中英双语贡献指南](CONTRIBUTING.md)。本仓库收录发布登记，不接收安装包或扩展源码的直接上传。
+
 ## Enroll an App release
 
 1. Upload both the packer-produced `.entry.json` and its matching `.zip` to a
