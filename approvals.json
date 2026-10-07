@@ -27,6 +27,12 @@
     },
     {
       "kind": "app",
+      "id": "session-insight",
+      "tag": "v2.1.1",
+      "sha256": "26e8e28b43168667a880ff85c48b991f59ffeecba50a5d4284d2ec12799085a5"
+    },
+    {
+      "kind": "app",
       "id": "session-porter",
       "tag": "v0.3.2",
       "sha256": "eb97065722063fdc89ca7e250dcad7cb33978b6a5c76d74fd9d05a91658f7975"

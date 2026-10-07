@@ -48,6 +48,12 @@
       "id": "doc-intake",
       "repository": "H-i-m-s/doc-intake",
       "publisher": "H-i-m-s"
+    },
+    {
+      "kind": "app",
+      "id": "session-insight",
+      "repository": "youyongdemao/HanaAgent-session-insight",
+      "publisher": "Swimming Cat"
     }
   ]
 }
