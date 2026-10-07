@@ -64,8 +64,8 @@
     {
       "kind": "app",
       "id": "dshana",
-      "tag": "v1.0.1+dsh-0.2.0-rc.2",
-      "sha256": "c9365b2cfb798da8f5b83bd36e370f7a60c256edf53ba708b81fd8704a28e383"
+      "tag": "v1.0.2+dsh-0.2.0-rc.2",
+      "sha256": "d8a144eba17b9457fa12e539fe6db12b09c41748cc3d48f20129fe4f3b7e4e82"
     }
   ]
 }
