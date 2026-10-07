@@ -12,6 +12,12 @@
       "id": "video-summarizer",
       "repository": "youyongdemao/video-summarizer",
       "publisher": "Swimming Cat"
+    },
+    {
+      "kind": "app",
+      "id": "session-porter",
+      "repository": "Hzl0929/Hana-Session-Porter",
+      "publisher": "Hzl0929"
     }
   ]
 }

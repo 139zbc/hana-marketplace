@@ -2,6 +2,12 @@
   "schemaVersion": 1,
   "approvals": [
     {
+      "kind": "app",
+      "id": "session-porter",
+      "tag": "v0.3.2",
+      "sha256": "eb97065722063fdc89ca7e250dcad7cb33978b6a5c76d74fd9d05a91658f7975"
+    },
+    {
       "kind": "recipe",
       "id": "hana-coder",
       "tag": "recipe-2026-10-07.1",
