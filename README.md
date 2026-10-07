@@ -89,5 +89,8 @@ requirements. Do not grant write access to the generation or PR jobs.
 
 The included Apache-2.0 license covers these catalog tools. Individual Apps
 retain the licenses declared by their authors. `market-export.json` identifies
-the Hana version used to export the bundled tool; re-export from Hana to update
-the tool and review the resulting changes.
+the Hana version used to export the bundled tool. This repository maintains its
+own documents, templates and workflows. To update the tool, run
+`npm run export:extension-market -- --update <path-to-this-checkout>` from a Hana
+checkout; it replaces only `scripts/extension-market-sync.mjs` and
+`market-export.json`. Review the resulting changes before committing them.
