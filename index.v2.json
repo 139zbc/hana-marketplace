@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "sourceId": "official-global",
   "name": "Hana Global Market",
-  "publishedAt": "2026-10-07T13:37:11.658Z",
+  "publishedAt": "2026-10-07T14:34:05.118Z",
   "items": [
     {
       "kind": "recipe",
@@ -19,6 +19,22 @@
         "format": "zip"
       },
       "repository": "https://github.com/liliMozi/hana-coder"
+    },
+    {
+      "kind": "skill",
+      "id": "video-summarizer",
+      "name": "video-summarizer",
+      "publisher": "Swimming Cat",
+      "description": "一键总结视频内容。用户丢一个视频链接，自动提取字幕/转录音频并通过模型整理成结构化摘要。Trigger: 总结这个视频, 帮我整理一下这个视频, 看看这个视频讲了什么, 丢 Bilibili/YouTube 等链接并要求总结视频内容, 视频总结, video summarize, summarize this video. Do NOT trigger: 普通视频生成请求, 与视频内容无关的简单问答, 非视频链接。兼容 DSharness、HanaAgent、workbuddy 等多 agent 框架。",
+      "version": "0.0.0",
+      "permissions": [],
+      "archive": {
+        "url": "https://github.com/youyongdemao/video-summarizer/releases/download/v1.2.0/skill-video-summarizer-b285d7c8537b1cf45ee2c70acfbfb26fe2b9757eea043f353416cad82643ebf0.zip",
+        "sha256": "b285d7c8537b1cf45ee2c70acfbfb26fe2b9757eea043f353416cad82643ebf0",
+        "size": 23285,
+        "format": "zip"
+      },
+      "repository": "https://github.com/youyongdemao/video-summarizer"
     }
   ]
 }
