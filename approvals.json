@@ -60,6 +60,12 @@
       "id": "video-summarizer",
       "tag": "v1.2.0",
       "sha256": "b285d7c8537b1cf45ee2c70acfbfb26fe2b9757eea043f353416cad82643ebf0"
+    },
+    {
+      "kind": "app",
+      "id": "github-cli",
+      "tag": "v0.2.9",
+      "sha256": "4de31f1db07d6de7e1daf4012195b3fb854dc7e85968f06ca7d45d432efc8bff"
     }
   ]
 }

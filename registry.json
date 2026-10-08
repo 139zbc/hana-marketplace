@@ -60,6 +60,12 @@
       "id": "session-insight",
       "repository": "youyongdemao/HanaAgent-session-insight",
       "publisher": "Swimming Cat"
+    },
+    {
+      "kind": "app",
+      "id": "github-cli",
+      "repository": "hayou2002/hana-github-cli",
+      "publisher": "hayou2002"
     }
   ]
 }
