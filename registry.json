@@ -66,6 +66,12 @@
       "id": "dshana",
       "repository": "Nyasers/DSHana",
       "publisher": "Nyasers"
+    },
+    {
+      "kind": "app",
+      "id": "eleckoi-tavern",
+      "repository": "openhanako-labs/openhanako-tavern",
+      "publisher": "Yuexiye"
     }
   ]
 }

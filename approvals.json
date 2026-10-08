@@ -66,6 +66,12 @@
       "id": "dshana",
       "tag": "v1.0.2+dsh-0.2.0-rc.2",
       "sha256": "d8a144eba17b9457fa12e539fe6db12b09c41748cc3d48f20129fe4f3b7e4e82"
+    },
+    {
+      "kind": "app",
+      "id": "eleckoi-tavern",
+      "tag": "v0.6.0",
+      "sha256": "8833cc57ae26178010381c674562d4da135f7900aa46da79d95ef9066eb07fd0"
     }
   ]
 }
