@@ -63,6 +63,24 @@
     },
     {
       "kind": "app",
+      "id": "dshana",
+      "repository": "Nyasers/DSHana",
+      "publisher": "Nyasers"
+    },
+    {
+      "kind": "app",
+      "id": "eleckoi-tavern",
+      "repository": "openhanako-labs/openhanako-tavern",
+      "publisher": "Yuexiye"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-audio-player",
+      "repository": "openhanako-labs/openhanako-audio-player",
+      "publisher": "Yuexiye"
+    },
+    {
+      "kind": "app",
       "id": "biaoqingbao-app",
       "repository": "moononnn/hanako-biaoqingbao-app",
       "publisher": "moononnn & 小花"
