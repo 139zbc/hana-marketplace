@@ -60,6 +60,12 @@
       "id": "session-insight",
       "repository": "youyongdemao/HanaAgent-session-insight",
       "publisher": "Swimming Cat"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-audio-player",
+      "repository": "openhanako-labs/openhanako-audio-player",
+      "publisher": "Yuexiye"
     }
   ]
 }
