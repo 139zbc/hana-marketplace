@@ -72,6 +72,12 @@
       "id": "eleckoi-tavern",
       "repository": "openhanako-labs/openhanako-tavern",
       "publisher": "Yuexiye"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-audio-player",
+      "repository": "openhanako-labs/openhanako-audio-player",
+      "publisher": "Yuexiye"
     }
   ]
 }

@@ -72,6 +72,12 @@
       "id": "eleckoi-tavern",
       "tag": "v0.6.0",
       "sha256": "8833cc57ae26178010381c674562d4da135f7900aa46da79d95ef9066eb07fd0"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-audio-player",
+      "tag": "v0.8.0",
+      "sha256": "b845b9d0a2dedaf21f5dd13a8c24b9024247f80eaed5816e9149f9613ac436e6"
     }
   ]
 }
