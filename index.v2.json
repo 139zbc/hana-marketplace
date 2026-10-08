@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "sourceId": "official-global",
   "name": "Hana Global Market",
-  "publishedAt": "2026-10-08T11:48:43.930Z",
+  "publishedAt": "2026-10-08T12:00:59.643Z",
   "items": [
     {
       "kind": "app",
@@ -185,7 +185,7 @@
       "repository": "https://github.com/H-i-m-s/doc-intake",
       "readmeUrl": "https://raw.githubusercontent.com/H-i-m-s/doc-intake/v3.0.0/README.md",
       "stats": {
-        "downloads": 123
+        "downloads": 124
       }
     },
     {
@@ -242,7 +242,7 @@
       "repository": "https://github.com/Nyasers/DSHana",
       "readmeUrl": "https://raw.githubusercontent.com/Nyasers/DSHana/v1.0.2%2Bdsh-0.2.0-rc.2/README.md",
       "stats": {
-        "downloads": 8
+        "downloads": 10
       }
     },
     {
@@ -509,7 +509,7 @@
       "repository": "https://github.com/openhanako-labs/openhanako-audio-player",
       "readmeUrl": "https://raw.githubusercontent.com/openhanako-labs/openhanako-audio-player/v0.8.0/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 5
       }
     },
     {
@@ -659,7 +659,7 @@
       "repository": "https://github.com/youyongdemao/HanaAgent-prompt-optimizer",
       "readmeUrl": "https://raw.githubusercontent.com/youyongdemao/HanaAgent-prompt-optimizer/v1.0.0/README.md",
       "stats": {
-        "downloads": 151
+        "downloads": 152
       }
     },
     {
@@ -708,7 +708,7 @@
       "repository": "https://github.com/youyongdemao/HanaAgent-session-insight",
       "readmeUrl": "https://raw.githubusercontent.com/youyongdemao/HanaAgent-session-insight/v2.1.1/README.md",
       "stats": {
-        "downloads": 239
+        "downloads": 240
       }
     },
     {
@@ -855,7 +855,7 @@
       "repository": "https://github.com/H-i-m-s/token-tracker",
       "readmeUrl": "https://raw.githubusercontent.com/H-i-m-s/token-tracker/v8.5.0/README.md",
       "stats": {
-        "downloads": 118
+        "downloads": 119
       }
     },
     {
@@ -875,7 +875,7 @@
       "repository": "https://github.com/liliMozi/ask-user-cards",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/ask-user-cards/recipe-2026-10-07/README.md",
       "stats": {
-        "downloads": 94
+        "downloads": 95
       }
     },
     {
@@ -887,15 +887,15 @@
       "version": "0.0.0",
       "permissions": [],
       "archive": {
-        "url": "https://github.com/liliMozi/hana-coder/releases/download/recipe-2026-10-07.1/recipe-hana-coder-007d582ca47d0b90a4da98674bef3efd7bc0b7fc80558d5a3a4e56c92a110a5b.zip",
-        "sha256": "007d582ca47d0b90a4da98674bef3efd7bc0b7fc80558d5a3a4e56c92a110a5b",
-        "size": 1314439,
+        "url": "https://github.com/liliMozi/hana-coder/releases/download/recipe-2026-10-08/recipe-hana-coder-f637cbba96436c729e7bf5f109bbdd0976ea333ab820030b84949a2e74b90e15.zip",
+        "sha256": "f637cbba96436c729e7bf5f109bbdd0976ea333ab820030b84949a2e74b90e15",
+        "size": 1318482,
         "format": "zip"
       },
       "repository": "https://github.com/liliMozi/hana-coder",
-      "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-coder/recipe-2026-10-07.1/README.md",
+      "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-coder/recipe-2026-10-08/README.md",
       "stats": {
-        "downloads": 92
+        "downloads": 0
       }
     },
     {
@@ -935,7 +935,7 @@
       "repository": "https://github.com/youyongdemao/video-summarizer",
       "readmeUrl": "https://raw.githubusercontent.com/youyongdemao/video-summarizer/v1.2.0/README.md",
       "stats": {
-        "downloads": 71
+        "downloads": 72
       }
     }
   ]
