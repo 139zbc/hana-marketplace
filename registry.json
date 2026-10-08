@@ -60,6 +60,12 @@
       "id": "session-insight",
       "repository": "youyongdemao/HanaAgent-session-insight",
       "publisher": "Swimming Cat"
+    },
+    {
+      "kind": "app",
+      "id": "biaoqingbao-app",
+      "repository": "moononnn/hanako-biaoqingbao-app",
+      "publisher": "moononnn & 小花"
     }
   ]
 }
