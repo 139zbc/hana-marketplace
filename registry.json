@@ -60,6 +60,12 @@
       "id": "session-insight",
       "repository": "youyongdemao/HanaAgent-session-insight",
       "publisher": "Swimming Cat"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-mail",
+      "repository": "openhanako-labs/openhanako-mail",
+      "publisher": "Yuexiye"
     }
   ]
 }
