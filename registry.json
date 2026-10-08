@@ -60,6 +60,12 @@
       "id": "session-insight",
       "repository": "youyongdemao/HanaAgent-session-insight",
       "publisher": "Swimming Cat"
+    },
+    {
+      "kind": "app",
+      "id": "shiguangji-app",
+      "repository": "moononnn/hanako-shiguangji-app",
+      "publisher": "moononnn & 小花"
     }
   ]
 }

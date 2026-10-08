@@ -60,6 +60,12 @@
       "id": "video-summarizer",
       "tag": "v1.2.0",
       "sha256": "b285d7c8537b1cf45ee2c70acfbfb26fe2b9757eea043f353416cad82643ebf0"
+    },
+    {
+      "kind": "app",
+      "id": "shiguangji-app",
+      "tag": "v0.0.41",
+      "sha256": "4eedcda55c027daf3524ab7652d770311f548ae0073b069a59db713e3b3e81a7"
     }
   ]
 }
