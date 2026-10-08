@@ -78,6 +78,60 @@
       "id": "hanako-audio-player",
       "repository": "openhanako-labs/openhanako-audio-player",
       "publisher": "Yuexiye"
+    },
+    {
+      "kind": "app",
+      "id": "hana-downloader",
+      "repository": "JohnGalt0802/hana-downloader",
+      "publisher": "John Galt"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-mail",
+      "repository": "openhanako-labs/openhanako-mail",
+      "publisher": "Yuexiye"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-gallery",
+      "repository": "openhanako-labs/openhanako-gallery",
+      "publisher": "Yuexiye"
+    },
+    {
+      "kind": "app",
+      "id": "chahuahui",
+      "repository": "moononnn/Hanako-chahuahui",
+      "publisher": "moononnn & 小花"
+    },
+    {
+      "kind": "app",
+      "id": "biaoqingbao-app",
+      "repository": "moononnn/hanako-biaoqingbao-app",
+      "publisher": "moononnn & 小花"
+    },
+    {
+      "kind": "app",
+      "id": "shiguangji-app",
+      "repository": "moononnn/hanako-shiguangji-app",
+      "publisher": "moononnn & 小花"
+    },
+    {
+      "kind": "app",
+      "id": "hana-excalidraw",
+      "repository": "139zbc/HanaAgent-plugins-HanaExcalidraw",
+      "publisher": "139zbc"
+    },
+    {
+      "kind": "app",
+      "id": "github-cli",
+      "repository": "hayou2002/hana-github-cli",
+      "publisher": "hayou2002"
+    },
+    {
+      "kind": "skill",
+      "id": "hana-vibecoding",
+      "repository": "hayou2002/hana-vibecoding",
+      "publisher": "hayou2002"
     }
   ]
 }

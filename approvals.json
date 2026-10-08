@@ -78,6 +78,60 @@
       "id": "hanako-audio-player",
       "tag": "v0.8.0",
       "sha256": "b845b9d0a2dedaf21f5dd13a8c24b9024247f80eaed5816e9149f9613ac436e6"
+    },
+    {
+      "kind": "app",
+      "id": "hana-downloader",
+      "tag": "v1.1.2",
+      "sha256": "902d5e6c2d0dbf9a3ec4b061a6202f7e079f67ff2df04b8a5d405796c0951f7d"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-mail",
+      "tag": "v0.6.15",
+      "sha256": "6b8794825a9ddaacae9c36bcd8874dfca5df957270e95b8ad5a85386a518a613"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-gallery",
+      "tag": "v0.8.1",
+      "sha256": "7e468018a9fe9906cf32d32197e9107d6347c0fc960d61c5076dd7d639d23065"
+    },
+    {
+      "kind": "app",
+      "id": "chahuahui",
+      "tag": "v0.7.504",
+      "sha256": "127bec786277bd4b16a0a35cc4f52e4e86535ce80059f7a8531b3aaae8d2d888"
+    },
+    {
+      "kind": "app",
+      "id": "biaoqingbao-app",
+      "tag": "v0.1.41",
+      "sha256": "a02e23b9e51add0b719b55a210c9a610b4773798b955ff7433c042c833a9a64d"
+    },
+    {
+      "kind": "app",
+      "id": "shiguangji-app",
+      "tag": "v0.0.41",
+      "sha256": "4eedcda55c027daf3524ab7652d770311f548ae0073b069a59db713e3b3e81a7"
+    },
+    {
+      "kind": "app",
+      "id": "hana-excalidraw",
+      "tag": "v1.1.0",
+      "sha256": "508a162f011242e91591ff42bd12763842f6ff5d6694baa6befc90072c4f5897"
+    },
+    {
+      "kind": "app",
+      "id": "github-cli",
+      "tag": "v0.2.9",
+      "sha256": "4de31f1db07d6de7e1daf4012195b3fb854dc7e85968f06ca7d45d432efc8bff"
+    },
+    {
+      "kind": "skill",
+      "id": "hana-vibecoding",
+      "tag": "v0.5.1",
+      "sha256": "3adaf99b1c28756b22fbdf1e1554e8b7e0a39ab2f4b132c81197d7307ba311c0"
     }
   ]
 }
