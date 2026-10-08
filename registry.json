@@ -60,6 +60,12 @@
       "id": "session-insight",
       "repository": "youyongdemao/HanaAgent-session-insight",
       "publisher": "Swimming Cat"
+    },
+    {
+      "kind": "skill",
+      "id": "hana-vibecoding",
+      "repository": "hayou2002/hana-vibecoding",
+      "publisher": "hayou2002"
     }
   ]
 }
