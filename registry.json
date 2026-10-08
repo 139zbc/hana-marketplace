@@ -60,6 +60,12 @@
       "id": "session-insight",
       "repository": "youyongdemao/HanaAgent-session-insight",
       "publisher": "Swimming Cat"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-gallery",
+      "repository": "openhanako-labs/openhanako-gallery",
+      "publisher": "Yuexiye"
     }
   ]
 }
