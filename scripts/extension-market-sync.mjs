@@ -58,6 +58,9 @@ function isSha256Hex(value) {
 function isPositiveInteger(value) {
   return Number.isInteger(value) && value > 0;
 }
+function isNonNegativeInteger(value) {
+  return Number.isInteger(value) && value >= 0;
+}
 function isParseableDate(value) {
   return typeof value === "string" && value.length > 0 && !Number.isNaN(Date.parse(value));
 }
@@ -90,6 +93,13 @@ function describeItemVersion(entry, path2) {
     return `${path2}.minAppVersion must be a non-empty string`;
   }
   return describeArchive(entry.archive, `${path2}.archive`);
+}
+function describeStats(value, path2) {
+  if (!isPlainObject(value)) return `${path2} must be an object`;
+  if (value.downloads !== void 0 && !isNonNegativeInteger(value.downloads)) {
+    return `${path2}.downloads must be a non-negative integer`;
+  }
+  return null;
 }
 function describeCompatibility(value, path2) {
   if (!isPlainObject(value)) return `${path2} must be an object`;
@@ -136,6 +146,10 @@ function describeMarketItem(raw, path2) {
   if (raw.categories !== void 0 && !isStringArray(raw.categories)) return `${path2}.categories must be an array of strings`;
   if (raw.keywords !== void 0 && !isStringArray(raw.keywords)) return `${path2}.keywords must be an array of strings`;
   if (raw.readmeUrl !== void 0 && typeof raw.readmeUrl !== "string") return `${path2}.readmeUrl must be a string`;
+  if (raw.stats !== void 0) {
+    const statsError = describeStats(raw.stats, `${path2}.stats`);
+    if (statsError) return statsError;
+  }
   return null;
 }
 function itemLabel(raw, index) {
@@ -972,6 +986,7 @@ function projectEntry(entry, registration, archiveUrl) {
     archive: { ...entry.archive, url: archiveUrl }
   };
   delete projected.versions;
+  delete projected.stats;
   return projected;
 }
 function strictIndex(raw, label) {
@@ -1030,18 +1045,47 @@ async function readReleaseCandidate(registration, { approval, fetchImpl, token }
   await verifyArchive(zipAsset, entry, registration, { fetchImpl, token });
   return { candidate: normalizeItem(projectEntry(entry, registration, zipAsset.browser_download_url)), tagName };
 }
-function publishedTag(item, repository) {
-  if (!item || item.repository !== canonicalRepository(repository)) return null;
+function releaseAssetLocation(archiveUrl, repository) {
   let decodedPath;
   try {
-    decodedPath = decodeURIComponent(new URL(item.archive.url).pathname);
+    decodedPath = decodeURIComponent(new URL(archiveUrl).pathname);
   } catch {
     return null;
   }
   const prefix = `/${repository}/releases/download/`;
   if (!decodedPath.startsWith(prefix)) return null;
   const parts = decodedPath.slice(prefix.length).split("/");
-  return parts.length === 2 && parts[0] ? parts[0] : null;
+  return parts.length === 2 && parts[0] && parts[1] ? { tag: parts[0], name: parts[1] } : null;
+}
+function publishedTag(item, repository) {
+  if (!item || item.repository !== canonicalRepository(repository)) return null;
+  return releaseAssetLocation(item.archive.url, repository)?.tag ?? null;
+}
+async function readDownloadCount(item, registration, { fetchImpl, token, releases }) {
+  let total = 0;
+  for (const archive of [item.archive, ...(item.versions || []).map((version) => version.archive)]) {
+    const location = releaseAssetLocation(archive.url, registration.repository);
+    if (!location) throw new Error(`archive ${archive.url} is not a release asset of ${registration.repository}`);
+    const key = `${registration.repository}@${location.tag}`;
+    if (!releases.has(key)) releases.set(key, readRelease(registration, { tag: location.tag, fetchImpl, token }));
+    const { assets, label } = await releases.get(key);
+    const asset = assets.find((candidate) => isPlainObject2(candidate) && candidate.name === location.name);
+    if (!asset) throw new Error(`${label} is missing published asset ${location.name}`);
+    if (!Number.isInteger(asset.download_count) || asset.download_count < 0) throw new Error(`${label} asset ${location.name} has no valid download count`);
+    total += asset.download_count;
+  }
+  return total;
+}
+async function withDownloadStats(item, registration, previousStats, options, warnings) {
+  try {
+    const downloads = await readDownloadCount(item, registration, options);
+    return { ...item, stats: { ...item.stats, downloads } };
+  } catch (error) {
+    warnings.push(`${registration.kind}/${registration.id}: download count unavailable, kept the previous value: ${error instanceof Error ? error.message : String(error)}`);
+    const kept = { ...item, stats: previousStats };
+    if (!previousStats) delete kept.stats;
+    return kept;
+  }
 }
 function withReadme(item, registration, approval) {
   if (item.readmeUrl) return item;
@@ -1059,6 +1103,8 @@ async function synchronizeMarket({ registry, approvals, previousIndex = null, fe
   const failures = [];
   const items = [];
   const pending = [];
+  const warnings = [];
+  const statsOptions = { fetchImpl, token, releases: /* @__PURE__ */ new Map() };
   for (const registration of registrations) {
     const approval = approved.get(enrollmentKey(registration));
     if (!approval) {
@@ -1068,12 +1114,13 @@ async function synchronizeMarket({ registry, approvals, previousIndex = null, fe
     const published = previousItems.get(enrollmentKey(registration));
     const reusable = reusablePublishedItem(published, registration, approval);
     if (reusable) {
-      items.push(withReadme(reusable, registration, approval));
+      items.push(await withDownloadStats(withReadme(reusable, registration, approval), registration, reusable.stats, statsOptions, warnings));
       continue;
     }
     try {
       const { candidate } = await readReleaseCandidate(registration, { approval, fetchImpl, token });
-      items.push(withReadme(historyFor(published, candidate, registration), registration, approval));
+      const item = withReadme(historyFor(published, candidate, registration), registration, approval);
+      items.push(await withDownloadStats(item, registration, published?.stats, statsOptions, warnings));
     } catch (error) {
       failures.push(`${registration.kind}/${registration.id} (${registration.repository}): ${error instanceof Error ? error.message : String(error)}`);
     }
@@ -1095,7 +1142,7 @@ ${failures.map((failure) => `- ${failure}`).join("\n")}`);
   }
   const index = strictIndex(draft, "generated index");
   const unchanged = Boolean(previous && deepEqual(index, previous));
-  return { index, unchanged, pending };
+  return { index, unchanged, pending, warnings };
 }
 async function discoverReleases({ registry, approvals, previousIndex = null, onlyChangedFrom = null, fetchImpl = fetch, token }) {
   const registrations = readRegistry(registry);
@@ -1181,8 +1228,9 @@ async function main() {
       if (args.changedFrom && skipped.length) process.exitCode = 1;
       return;
     }
-    const { index, unchanged, pending } = await synchronizeMarket({ registry, approvals: approvalsDocument, previousIndex: previous, token: process.env.GITHUB_TOKEN });
+    const { index, unchanged, pending, warnings } = await synchronizeMarket({ registry, approvals: approvalsDocument, previousIndex: previous, token: process.env.GITHUB_TOKEN });
     if (pending.length) console.log(`extension-market-sync: awaiting approval: ${pending.join(", ")}`);
+    for (const warning of warnings) console.warn(`extension-market-sync: warning: ${warning}`);
     if (args.check) console.log(`extension-market-sync: ${unchanged ? "no changes" : "index would change"} (${index.items.length} item(s))`);
     else if (unchanged && outPath === previousPath) console.log(`extension-market-sync: no changes (${index.items.length} item(s))`);
     else {
