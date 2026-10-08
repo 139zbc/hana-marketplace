@@ -60,6 +60,12 @@
       "id": "session-insight",
       "repository": "youyongdemao/HanaAgent-session-insight",
       "publisher": "Swimming Cat"
+    },
+    {
+      "kind": "app",
+      "id": "hana-excalidraw",
+      "repository": "139zbc/HanaAgent-plugins-HanaExcalidraw",
+      "publisher": "139zbc"
     }
   ]
 }

@@ -60,6 +60,12 @@
       "id": "video-summarizer",
       "tag": "v1.2.0",
       "sha256": "b285d7c8537b1cf45ee2c70acfbfb26fe2b9757eea043f353416cad82643ebf0"
+    },
+    {
+      "kind": "app",
+      "id": "hana-excalidraw",
+      "tag": "v1.1.0",
+      "sha256": "508a162f011242e91591ff42bd12763842f6ff5d6694baa6befc90072c4f5897"
     }
   ]
 }
