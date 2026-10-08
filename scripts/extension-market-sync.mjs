@@ -1061,18 +1061,60 @@ function publishedTag(item, repository) {
   if (!item || item.repository !== canonicalRepository(repository)) return null;
   return releaseAssetLocation(item.archive.url, repository)?.tag ?? null;
 }
-async function readDownloadCount(item, registration, { fetchImpl, token, releases }) {
+var MAX_RELEASE_PAGES = 10;
+function validDownloadCount(asset, label) {
+  if (!Number.isInteger(asset.download_count) || asset.download_count < 0) throw new Error(`${label} asset ${asset.name} has no valid download count`);
+  return asset.download_count;
+}
+async function readStableReleases(registration, { fetchImpl, token, releases }) {
+  const key = `${registration.repository}@*`;
+  if (!releases.has(key)) releases.set(key, (async () => {
+    const all = [];
+    for (let page = 1; page <= MAX_RELEASE_PAGES; page += 1) {
+      const response = await fetchBounded({
+        url: `${API_BASE}/repos/${registration.repository}/releases?per_page=100&page=${page}`,
+        maxRedirects: 2,
+        maxResponseBytes: MAX_API_BYTES,
+        timeoutMs: TIMEOUT_MS,
+        fetchImpl: githubApiFetch(fetchImpl, token)
+      });
+      assertHttpSuccess(response, `${registration.kind}/${registration.id} release list`);
+      const list = parseJson(response.body, "release list");
+      if (!Array.isArray(list)) throw new Error("release list must be an array");
+      all.push(...list);
+      if (list.length < 100) return all.filter((release) => isPlainObject2(release) && release.draft !== true && release.prerelease !== true && Array.isArray(release.assets));
+    }
+    throw new Error(`release list has more than ${MAX_RELEASE_PAGES * 100} releases`);
+  })());
+  return releases.get(key);
+}
+async function readDownloadCount(item, registration, options) {
+  const current = releaseAssetLocation(item.archive.url, registration.repository);
+  if (!current) throw new Error(`archive ${item.archive.url} is not a release asset of ${registration.repository}`);
+  if (registration.kind === "skill" || registration.kind === "recipe") {
+    const pattern = new RegExp(`^${registration.kind}-${registration.id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}-[0-9a-f]{64}\\.zip$`);
+    let total2 = 0;
+    let foundCurrent = false;
+    for (const release of await readStableReleases(registration, options)) {
+      for (const asset of release.assets) {
+        if (!isPlainObject2(asset) || typeof asset.name !== "string" || !pattern.test(asset.name)) continue;
+        total2 += validDownloadCount(asset, `release ${release.tag_name}`);
+        if (release.tag_name === current.tag && asset.name === current.name) foundCurrent = true;
+      }
+    }
+    if (!foundCurrent) throw new Error(`release ${current.tag} is missing published asset ${current.name}`);
+    return total2;
+  }
   let total = 0;
   for (const archive of [item.archive, ...(item.versions || []).map((version) => version.archive)]) {
     const location = releaseAssetLocation(archive.url, registration.repository);
     if (!location) throw new Error(`archive ${archive.url} is not a release asset of ${registration.repository}`);
     const key = `${registration.repository}@${location.tag}`;
-    if (!releases.has(key)) releases.set(key, readRelease(registration, { tag: location.tag, fetchImpl, token }));
-    const { assets, label } = await releases.get(key);
+    if (!options.releases.has(key)) options.releases.set(key, readRelease(registration, { tag: location.tag, fetchImpl: options.fetchImpl, token: options.token }));
+    const { assets, label } = await options.releases.get(key);
     const asset = assets.find((candidate) => isPlainObject2(candidate) && candidate.name === location.name);
     if (!asset) throw new Error(`${label} is missing published asset ${location.name}`);
-    if (!Number.isInteger(asset.download_count) || asset.download_count < 0) throw new Error(`${label} asset ${location.name} has no valid download count`);
-    total += asset.download_count;
+    total += validDownloadCount(asset, label);
   }
   return total;
 }
