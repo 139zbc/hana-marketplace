@@ -60,6 +60,12 @@
       "id": "video-summarizer",
       "tag": "v1.2.0",
       "sha256": "b285d7c8537b1cf45ee2c70acfbfb26fe2b9757eea043f353416cad82643ebf0"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-gallery",
+      "tag": "v0.8.1",
+      "sha256": "7e468018a9fe9906cf32d32197e9107d6347c0fc960d61c5076dd7d639d23065"
     }
   ]
 }
