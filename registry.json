@@ -60,6 +60,12 @@
       "id": "session-insight",
       "repository": "youyongdemao/HanaAgent-session-insight",
       "publisher": "Swimming Cat"
+    },
+    {
+      "kind": "app",
+      "id": "chahuahui",
+      "repository": "moononnn/Hanako-chahuahui",
+      "publisher": "moononnn & 小花"
     }
   ]
 }
