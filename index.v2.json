@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "sourceId": "official-global",
   "name": "Hana Global Market",
-  "publishedAt": "2026-10-08T12:09:49.207Z",
+  "publishedAt": "2026-10-09T10:42:53.253Z",
   "items": [
     {
       "kind": "app",
@@ -50,7 +50,7 @@
       "repository": "https://github.com/youyongdemao/HanaAgent-answer-choice",
       "readmeUrl": "https://raw.githubusercontent.com/youyongdemao/HanaAgent-answer-choice/v0.1.1/README.md",
       "stats": {
-        "downloads": 124
+        "downloads": 228
       }
     },
     {
@@ -105,7 +105,7 @@
       "repository": "https://github.com/moononnn/hanako-biaoqingbao-app",
       "readmeUrl": "https://raw.githubusercontent.com/moononnn/hanako-biaoqingbao-app/v0.1.41/README.md",
       "stats": {
-        "downloads": 5
+        "downloads": 71
       }
     },
     {
@@ -148,7 +148,7 @@
       "repository": "https://github.com/moononnn/Hanako-chahuahui",
       "readmeUrl": "https://raw.githubusercontent.com/moononnn/Hanako-chahuahui/v0.7.504/README.md",
       "stats": {
-        "downloads": 7
+        "downloads": 56
       }
     },
     {
@@ -185,7 +185,7 @@
       "repository": "https://github.com/H-i-m-s/doc-intake",
       "readmeUrl": "https://raw.githubusercontent.com/H-i-m-s/doc-intake/v3.0.0/README.md",
       "stats": {
-        "downloads": 125
+        "downloads": 193
       }
     },
     {
@@ -242,7 +242,7 @@
       "repository": "https://github.com/Nyasers/DSHana",
       "readmeUrl": "https://raw.githubusercontent.com/Nyasers/DSHana/v1.0.2%2Bdsh-0.2.0-rc.2/README.md",
       "stats": {
-        "downloads": 10
+        "downloads": 69
       }
     },
     {
@@ -297,7 +297,7 @@
       "repository": "https://github.com/openhanako-labs/openhanako-tavern",
       "readmeUrl": "https://raw.githubusercontent.com/openhanako-labs/openhanako-tavern/v0.6.0/README.md",
       "stats": {
-        "downloads": 5
+        "downloads": 38
       }
     },
     {
@@ -340,7 +340,7 @@
       "repository": "https://github.com/H-i-m-s/git-save-load",
       "readmeUrl": "https://raw.githubusercontent.com/H-i-m-s/git-save-load/v3.2.0/README.md",
       "stats": {
-        "downloads": 71
+        "downloads": 112
       }
     },
     {
@@ -374,7 +374,7 @@
       "repository": "https://github.com/hayou2002/hana-github-cli",
       "readmeUrl": "https://raw.githubusercontent.com/hayou2002/hana-github-cli/v0.2.9/README.md",
       "stats": {
-        "downloads": 3
+        "downloads": 68
       }
     },
     {
@@ -435,7 +435,7 @@
       "repository": "https://github.com/JohnGalt0802/hana-downloader",
       "readmeUrl": "https://raw.githubusercontent.com/JohnGalt0802/hana-downloader/v1.1.2/README.md",
       "stats": {
-        "downloads": 6
+        "downloads": 105
       }
     },
     {
@@ -469,7 +469,7 @@
       "repository": "https://github.com/139zbc/HanaAgent-plugins-HanaExcalidraw",
       "readmeUrl": "https://raw.githubusercontent.com/139zbc/HanaAgent-plugins-HanaExcalidraw/v1.1.0/README.md",
       "stats": {
-        "downloads": 6
+        "downloads": 79
       }
     },
     {
@@ -509,7 +509,7 @@
       "repository": "https://github.com/openhanako-labs/openhanako-audio-player",
       "readmeUrl": "https://raw.githubusercontent.com/openhanako-labs/openhanako-audio-player/v0.8.0/README.md",
       "stats": {
-        "downloads": 5
+        "downloads": 44
       }
     },
     {
@@ -555,7 +555,7 @@
       "repository": "https://github.com/openhanako-labs/openhanako-gallery",
       "readmeUrl": "https://raw.githubusercontent.com/openhanako-labs/openhanako-gallery/v0.8.1/README.md",
       "stats": {
-        "downloads": 3
+        "downloads": 44
       }
     },
     {
@@ -613,7 +613,7 @@
       "repository": "https://github.com/openhanako-labs/openhanako-mail",
       "readmeUrl": "https://raw.githubusercontent.com/openhanako-labs/openhanako-mail/v0.6.15/README.md",
       "stats": {
-        "downloads": 3
+        "downloads": 37
       }
     },
     {
@@ -659,7 +659,7 @@
       "repository": "https://github.com/youyongdemao/HanaAgent-prompt-optimizer",
       "readmeUrl": "https://raw.githubusercontent.com/youyongdemao/HanaAgent-prompt-optimizer/v1.0.0/README.md",
       "stats": {
-        "downloads": 153
+        "downloads": 251
       }
     },
     {
@@ -708,7 +708,7 @@
       "repository": "https://github.com/youyongdemao/HanaAgent-session-insight",
       "readmeUrl": "https://raw.githubusercontent.com/youyongdemao/HanaAgent-session-insight/v2.1.1/README.md",
       "stats": {
-        "downloads": 241
+        "downloads": 377
       }
     },
     {
@@ -745,7 +745,7 @@
       "repository": "https://github.com/Hzl0929/Hana-Session-Porter",
       "readmeUrl": "https://raw.githubusercontent.com/Hzl0929/Hana-Session-Porter/v0.3.2/README.md",
       "stats": {
-        "downloads": 65
+        "downloads": 108
       }
     },
     {
@@ -806,7 +806,7 @@
       "repository": "https://github.com/moononnn/hanako-shiguangji-app",
       "readmeUrl": "https://raw.githubusercontent.com/moononnn/hanako-shiguangji-app/v0.0.41/README.md",
       "stats": {
-        "downloads": 5
+        "downloads": 64
       }
     },
     {
@@ -855,7 +855,7 @@
       "repository": "https://github.com/H-i-m-s/token-tracker",
       "readmeUrl": "https://raw.githubusercontent.com/H-i-m-s/token-tracker/v8.5.0/README.md",
       "stats": {
-        "downloads": 120
+        "downloads": 180
       }
     },
     {
@@ -875,7 +875,7 @@
       "repository": "https://github.com/liliMozi/ask-user-cards",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/ask-user-cards/recipe-2026-10-07/README.md",
       "stats": {
-        "downloads": 95
+        "downloads": 168
       }
     },
     {
@@ -895,7 +895,7 @@
       "repository": "https://github.com/liliMozi/hana-coder",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-coder/recipe-2026-10-08/README.md",
       "stats": {
-        "downloads": 100
+        "downloads": 177
       }
     },
     {
@@ -915,7 +915,7 @@
       "repository": "https://github.com/hayou2002/hana-vibecoding",
       "readmeUrl": "https://raw.githubusercontent.com/hayou2002/hana-vibecoding/v0.5.1/README.md",
       "stats": {
-        "downloads": 5
+        "downloads": 62
       }
     },
     {
@@ -935,7 +935,7 @@
       "repository": "https://github.com/youyongdemao/video-summarizer",
       "readmeUrl": "https://raw.githubusercontent.com/youyongdemao/video-summarizer/v1.2.0/README.md",
       "stats": {
-        "downloads": 72
+        "downloads": 113
       }
     }
   ]
