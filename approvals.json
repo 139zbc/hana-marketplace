@@ -118,8 +118,8 @@
     {
       "kind": "app",
       "id": "hana-excalidraw",
-      "tag": "v1.1.0",
-      "sha256": "508a162f011242e91591ff42bd12763842f6ff5d6694baa6befc90072c4f5897"
+      "tag": "v1.1.1",
+      "sha256": "588acc363db167a8152037364151cca974de57aca011e92af3d4207e04db5d1a"
     },
     {
       "kind": "app",
