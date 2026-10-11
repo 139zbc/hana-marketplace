@@ -508,8 +508,8 @@
     {
       "kind": "app",
       "id": "xianhuaniang",
-      "tag": "v0.1.1",
-      "sha256": "d1e655f54b397a967dd6c05ef24eb153b783f2af946cb7829510eb00bf29f450"
+      "tag": "v0.1.2",
+      "sha256": "946e3400223de4d4dafa501679723e9f4899664be81eac1c8a172a14624f21a9"
     }
   ]
 }
