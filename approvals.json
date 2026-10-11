@@ -508,8 +508,8 @@
     {
       "kind": "app",
       "id": "agent-workflow-canvas",
-      "tag": "v2.3.4",
-      "sha256": "ffc6fc8f3ca17641292398fa44d7398e00222f30fcf17499734c6f625b68571b"
+      "tag": "v2.4.1",
+      "sha256": "efe521d1a0738d6291cc746932803f292a4233d1e77136295d7e3c094f3b9ecc"
     }
   ]
 }
