@@ -504,6 +504,12 @@
       "id": "bookmate",
       "repository": "a13188087907/bookmate",
       "publisher": "XuJC"
+    },
+    {
+      "kind": "app",
+      "id": "bilibili-intake-v2",
+      "repository": "openhanako-labs/openhanako-bilibili-intake",
+      "publisher": "ophelia"
     }
   ]
 }
