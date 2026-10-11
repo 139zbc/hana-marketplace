@@ -508,8 +508,8 @@
     {
       "kind": "app",
       "id": "tigexing-app",
-      "tag": "v0.0.18",
-      "sha256": "684f904f103f690ce772c218846b1ebe906312954fa846d21b14f6f5799bc690"
+      "tag": "v0.0.19",
+      "sha256": "e0fd521e3cdda338ef162b53ad8bde9e737a845c042cceb5212c03f97af7c1b9"
     }
   ]
 }
