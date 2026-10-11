@@ -508,8 +508,8 @@
     {
       "kind": "app",
       "id": "feishu-push",
-      "tag": "v2.0.0",
-      "sha256": "2549928386812c735c9260b9c60e449a1b8d10e916127ba5b7779e1e5699d8b9"
+      "tag": "v2.0.1",
+      "sha256": "fd6e44d472b6b322fc2461d6d9acd71a83bdf99384d5c3ddde091dd1f97b8432"
     }
   ]
 }
