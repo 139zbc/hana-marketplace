@@ -504,6 +504,12 @@
       "id": "bookmate",
       "repository": "a13188087907/bookmate",
       "publisher": "XuJC"
+    },
+    {
+      "kind": "app",
+      "id": "feishu-push",
+      "repository": "Liu-MouRen/feishu-push",
+      "publisher": "Kai_Chen"
     }
   ]
 }
