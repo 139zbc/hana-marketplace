@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "sourceId": "official-global",
   "name": "Hana Global Market",
-  "publishedAt": "2026-10-09T20:29:31.172Z",
+  "publishedAt": "2026-10-10T09:58:45.519Z",
   "items": [
     {
       "kind": "app",
@@ -44,7 +44,7 @@
       "repository": "https://github.com/Codemaker997/agent-model-plan",
       "readmeUrl": "https://raw.githubusercontent.com/Codemaker997/agent-model-plan/v1.2.0/README.md",
       "stats": {
-        "downloads": 3
+        "downloads": 14
       }
     },
     {
@@ -105,7 +105,7 @@
       ],
       "readmeUrl": "https://raw.githubusercontent.com/youyongdemao/HanaAgent-answer-choice/v0.1.3/README.md",
       "stats": {
-        "downloads": 256
+        "downloads": 311
       }
     },
     {
@@ -160,7 +160,7 @@
       "repository": "https://github.com/moononnn/hanako-biaoqingbao-app",
       "readmeUrl": "https://raw.githubusercontent.com/moononnn/hanako-biaoqingbao-app/v0.1.41/README.md",
       "stats": {
-        "downloads": 90
+        "downloads": 116
       }
     },
     {
@@ -200,7 +200,7 @@
       "repository": "https://github.com/a13188087907/bookmate",
       "readmeUrl": "https://raw.githubusercontent.com/a13188087907/bookmate/v1.2.4/README.md",
       "stats": {
-        "downloads": 5
+        "downloads": 22
       }
     },
     {
@@ -243,7 +243,7 @@
       "repository": "https://github.com/moononnn/Hanako-chahuahui",
       "readmeUrl": "https://raw.githubusercontent.com/moononnn/Hanako-chahuahui/v0.7.504/README.md",
       "stats": {
-        "downloads": 72
+        "downloads": 85
       }
     },
     {
@@ -280,7 +280,7 @@
       "repository": "https://github.com/H-i-m-s/doc-intake",
       "readmeUrl": "https://raw.githubusercontent.com/H-i-m-s/doc-intake/v3.0.0/README.md",
       "stats": {
-        "downloads": 215
+        "downloads": 242
       }
     },
     {
@@ -350,7 +350,7 @@
       ],
       "readmeUrl": "https://raw.githubusercontent.com/Nyasers/DSHana/v1.0.4%2Bdsh-0.2.0-rc.2/README.md",
       "stats": {
-        "downloads": 104
+        "downloads": 143
       }
     },
     {
@@ -405,7 +405,7 @@
       "repository": "https://github.com/openhanako-labs/openhanako-tavern",
       "readmeUrl": "https://raw.githubusercontent.com/openhanako-labs/openhanako-tavern/v0.6.0/README.md",
       "stats": {
-        "downloads": 46
+        "downloads": 51
       }
     },
     {
@@ -448,7 +448,7 @@
       "repository": "https://github.com/H-i-m-s/git-save-load",
       "readmeUrl": "https://raw.githubusercontent.com/H-i-m-s/git-save-load/v3.2.0/README.md",
       "stats": {
-        "downloads": 124
+        "downloads": 138
       }
     },
     {
@@ -482,7 +482,7 @@
       "repository": "https://github.com/hayou2002/hana-github-cli",
       "readmeUrl": "https://raw.githubusercontent.com/hayou2002/hana-github-cli/v0.2.9/README.md",
       "stats": {
-        "downloads": 94
+        "downloads": 119
       }
     },
     {
@@ -543,7 +543,7 @@
       "repository": "https://github.com/JohnGalt0802/hana-downloader",
       "readmeUrl": "https://raw.githubusercontent.com/JohnGalt0802/hana-downloader/v1.1.2/README.md",
       "stats": {
-        "downloads": 128
+        "downloads": 159
       }
     },
     {
@@ -589,7 +589,7 @@
       ],
       "readmeUrl": "https://raw.githubusercontent.com/139zbc/HanaAgent-plugins-HanaExcalidraw/v1.1.1/README.md",
       "stats": {
-        "downloads": 111
+        "downloads": 162
       }
     },
     {
@@ -623,7 +623,7 @@
       "repository": "https://github.com/SeptTpes/hana-powercontext",
       "readmeUrl": "https://raw.githubusercontent.com/SeptTpes/hana-powercontext/v1.0.1/README.md",
       "stats": {
-        "downloads": 7
+        "downloads": 20
       }
     },
     {
@@ -657,7 +657,7 @@
       "repository": "https://github.com/zhang8019/hana-vault-app",
       "readmeUrl": "https://raw.githubusercontent.com/zhang8019/hana-vault-app/v0.2.0/README.md",
       "stats": {
-        "downloads": 7
+        "downloads": 13
       }
     },
     {
@@ -697,7 +697,7 @@
       "repository": "https://github.com/openhanako-labs/openhanako-audio-player",
       "readmeUrl": "https://raw.githubusercontent.com/openhanako-labs/openhanako-audio-player/v0.8.0/README.md",
       "stats": {
-        "downloads": 57
+        "downloads": 65
       }
     },
     {
@@ -743,7 +743,7 @@
       "repository": "https://github.com/openhanako-labs/openhanako-gallery",
       "readmeUrl": "https://raw.githubusercontent.com/openhanako-labs/openhanako-gallery/v0.8.1/README.md",
       "stats": {
-        "downloads": 57
+        "downloads": 61
       }
     },
     {
@@ -801,7 +801,7 @@
       "repository": "https://github.com/openhanako-labs/openhanako-mail",
       "readmeUrl": "https://raw.githubusercontent.com/openhanako-labs/openhanako-mail/v0.6.15/README.md",
       "stats": {
-        "downloads": 53
+        "downloads": 61
       }
     },
     {
@@ -835,7 +835,7 @@
       "repository": "https://github.com/Doubi250/hana-app-minimax-video",
       "readmeUrl": "https://raw.githubusercontent.com/Doubi250/hana-app-minimax-video/v0.1.7/README.md",
       "stats": {
-        "downloads": 9
+        "downloads": 18
       }
     },
     {
@@ -866,7 +866,7 @@
       "repository": "https://github.com/zhang8019/hana-office-toolkit",
       "readmeUrl": "https://raw.githubusercontent.com/zhang8019/hana-office-toolkit/v0.10.1/README.md",
       "stats": {
-        "downloads": 3
+        "downloads": 24
       }
     },
     {
@@ -912,7 +912,7 @@
       "repository": "https://github.com/youyongdemao/HanaAgent-prompt-optimizer",
       "readmeUrl": "https://raw.githubusercontent.com/youyongdemao/HanaAgent-prompt-optimizer/v1.0.0/README.md",
       "stats": {
-        "downloads": 282
+        "downloads": 314
       }
     },
     {
@@ -952,7 +952,7 @@
       "repository": "https://github.com/n3ko3n/HanaAgent-prompt-studio",
       "readmeUrl": "https://raw.githubusercontent.com/n3ko3n/HanaAgent-prompt-studio/v0.4.3/README.md",
       "stats": {
-        "downloads": 6
+        "downloads": 23
       }
     },
     {
@@ -1013,7 +1013,7 @@
       ],
       "readmeUrl": "https://raw.githubusercontent.com/youyongdemao/HanaAgent-session-insight/v2.1.2/README.md",
       "stats": {
-        "downloads": 500
+        "downloads": 601
       }
     },
     {
@@ -1050,7 +1050,7 @@
       "repository": "https://github.com/Hzl0929/Hana-Session-Porter",
       "readmeUrl": "https://raw.githubusercontent.com/Hzl0929/Hana-Session-Porter/v0.3.2/README.md",
       "stats": {
-        "downloads": 120
+        "downloads": 134
       }
     },
     {
@@ -1111,7 +1111,7 @@
       "repository": "https://github.com/moononnn/hanako-shiguangji-app",
       "readmeUrl": "https://raw.githubusercontent.com/moononnn/hanako-shiguangji-app/v0.0.41/README.md",
       "stats": {
-        "downloads": 76
+        "downloads": 86
       }
     },
     {
@@ -1160,7 +1160,7 @@
       "repository": "https://github.com/H-i-m-s/token-tracker",
       "readmeUrl": "https://raw.githubusercontent.com/H-i-m-s/token-tracker/v8.5.0/README.md",
       "stats": {
-        "downloads": 200
+        "downloads": 227
       }
     },
     {
@@ -1221,7 +1221,7 @@
       "repository": "https://github.com/givfei5-hash/openhanako-voiceloop-app",
       "readmeUrl": "https://raw.githubusercontent.com/givfei5-hash/openhanako-voiceloop-app/v2.2.4/README.md",
       "stats": {
-        "downloads": 5
+        "downloads": 19
       }
     },
     {
@@ -1242,7 +1242,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 6
+        "downloads": 28
       }
     },
     {
@@ -1263,7 +1263,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -1284,7 +1284,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -1305,7 +1305,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 6
+        "downloads": 24
       }
     },
     {
@@ -1326,7 +1326,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 6
+        "downloads": 17
       }
     },
     {
@@ -1347,7 +1347,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 11
       }
     },
     {
@@ -1368,7 +1368,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 11
       }
     },
     {
@@ -1389,7 +1389,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -1410,7 +1410,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -1431,7 +1431,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 9
       }
     },
     {
@@ -1452,7 +1452,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -1473,7 +1473,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 11
       }
     },
     {
@@ -1494,7 +1494,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 6
+        "downloads": 13
       }
     },
     {
@@ -1515,7 +1515,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 6
+        "downloads": 11
       }
     },
     {
@@ -1536,7 +1536,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 6
+        "downloads": 11
       }
     },
     {
@@ -1557,7 +1557,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 6
+        "downloads": 11
       }
     },
     {
@@ -1578,7 +1578,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 6
+        "downloads": 10
       }
     },
     {
@@ -1599,7 +1599,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -1620,7 +1620,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 11
       }
     },
     {
@@ -1641,7 +1641,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 16
       }
     },
     {
@@ -1662,7 +1662,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 14
       }
     },
     {
@@ -1683,7 +1683,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 10
       }
     },
     {
@@ -1704,7 +1704,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 37
       }
     },
     {
@@ -1725,7 +1725,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 9
       }
     },
     {
@@ -1746,7 +1746,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 11
       }
     },
     {
@@ -1767,7 +1767,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -1788,7 +1788,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -1809,7 +1809,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 9
       }
     },
     {
@@ -1830,7 +1830,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 11
       }
     },
     {
@@ -1851,7 +1851,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -1872,7 +1872,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -1893,7 +1893,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -1914,7 +1914,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 6
+        "downloads": 11
       }
     },
     {
@@ -1935,7 +1935,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -1956,7 +1956,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -1977,7 +1977,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -1998,7 +1998,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -2019,7 +2019,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -2040,7 +2040,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 10
       }
     },
     {
@@ -2061,7 +2061,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -2082,7 +2082,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -2103,7 +2103,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -2124,7 +2124,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -2145,7 +2145,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -2166,7 +2166,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -2187,7 +2187,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 14
       }
     },
     {
@@ -2208,7 +2208,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 6
+        "downloads": 10
       }
     },
     {
@@ -2229,7 +2229,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -2250,7 +2250,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -2271,7 +2271,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -2292,7 +2292,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 8
       }
     },
     {
@@ -2313,7 +2313,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 10
       }
     },
     {
@@ -2334,7 +2334,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 12
       }
     },
     {
@@ -2355,7 +2355,7 @@
       "repository": "https://github.com/liliMozi/hana-connectors",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-connectors/v2026.10.10/README.md",
       "stats": {
-        "downloads": 4
+        "downloads": 11
       }
     },
     {
@@ -2375,7 +2375,7 @@
       "repository": "https://github.com/liliMozi/ask-user-cards",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/ask-user-cards/recipe-2026-10-07/README.md",
       "stats": {
-        "downloads": 206
+        "downloads": 262
       }
     },
     {
@@ -2395,7 +2395,7 @@
       "repository": "https://github.com/liliMozi/hana-coder",
       "readmeUrl": "https://raw.githubusercontent.com/liliMozi/hana-coder/recipe-2026-10-08/README.md",
       "stats": {
-        "downloads": 219
+        "downloads": 264
       }
     },
     {
@@ -2415,7 +2415,7 @@
       "repository": "https://github.com/hayou2002/hana-vibecoding",
       "readmeUrl": "https://raw.githubusercontent.com/hayou2002/hana-vibecoding/v0.5.1/README.md",
       "stats": {
-        "downloads": 98
+        "downloads": 153
       }
     },
     {
@@ -2435,7 +2435,7 @@
       "repository": "https://github.com/youyongdemao/video-summarizer",
       "readmeUrl": "https://raw.githubusercontent.com/youyongdemao/video-summarizer/v1.2.0/README.md",
       "stats": {
-        "downloads": 148
+        "downloads": 190
       }
     }
   ]
