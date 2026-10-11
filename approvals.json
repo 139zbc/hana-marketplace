@@ -60,6 +60,12 @@
       "id": "video-summarizer",
       "tag": "v1.2.0",
       "sha256": "b285d7c8537b1cf45ee2c70acfbfb26fe2b9757eea043f353416cad82643ebf0"
+    },
+    {
+      "kind": "recipe",
+      "id": "hana-card-templates",
+      "tag": "recipe-2026-10-11",
+      "sha256": "989567b871bf44fab091e8f0d1778ff9ccbed2cd91e56165f26650b53ab8caea"
     }
   ]
 }

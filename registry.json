@@ -60,6 +60,12 @@
       "id": "session-insight",
       "repository": "youyongdemao/HanaAgent-session-insight",
       "publisher": "Swimming Cat"
+    },
+    {
+      "kind": "recipe",
+      "id": "hana-card-templates",
+      "repository": "openhanako-labs/openhanako-sundries",
+      "publisher": "Yuexiye"
     }
   ]
 }
