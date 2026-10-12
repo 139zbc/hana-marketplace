@@ -76,8 +76,8 @@
     {
       "kind": "app",
       "id": "hanako-audio-player",
-      "tag": "v0.11.0",
-      "sha256": "49294d81d6316b52f111c3ce5083da2f1383a12fffeb7d4b7d793474d7230454"
+      "tag": "v0.11.8",
+      "sha256": "aa84873a0d84527e9e0c9937cc3fdc7d7e1203d7436e8d27ef1dc5e395ba73e2"
     },
     {
       "kind": "app",
