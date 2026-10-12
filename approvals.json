@@ -112,8 +112,8 @@
     {
       "kind": "app",
       "id": "shiguangji-app",
-      "tag": "v0.0.50",
-      "sha256": "4088765cd5092d26cf3016a9360f4fde68112f065013b8388faa550733f47c51"
+      "tag": "v0.0.53",
+      "sha256": "d90f6954770c7aa84e7cdfa1d7dd2a4b89c80478ec278533998402221e5af740"
     },
     {
       "kind": "app",
