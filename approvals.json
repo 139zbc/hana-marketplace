@@ -106,8 +106,8 @@
     {
       "kind": "app",
       "id": "biaoqingbao-app",
-      "tag": "v0.2.8",
-      "sha256": "03cb47d95f814ce2a7f747be5cab7c8891014406d169d3a89a0b66ddc19e40ea"
+      "tag": "v0.2.12",
+      "sha256": "e43fbfa612fcd27c9ebedb3bc76187fc9b67999b47886f1b8e5d085ce5c46060"
     },
     {
       "kind": "app",
