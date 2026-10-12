@@ -508,8 +508,8 @@
     {
       "kind": "app",
       "id": "hanako-simple-player",
-      "tag": "v1.0.6-simple",
-      "sha256": "4ba311eb312875aed6881800986842be1f2339fb4027f86d12ad0e4ae3b88529"
+      "tag": "v1.0.7-simple",
+      "sha256": "c95e7d621af827820d126e92bbd24bb37dff46568c0dff21675096eec970c110"
     }
   ]
 }
