@@ -28,8 +28,8 @@
     {
       "kind": "app",
       "id": "session-insight",
-      "tag": "v2.1.2",
-      "sha256": "44e05a5f658363fea6811b7543821c8f9e0cd1838ee22ff8518d0f476b345f77"
+      "tag": "v2.1.4",
+      "sha256": "824d5c69908c67c77a2c6f0916dd49a2e8ae6815ccfb54d9f1990c3fe6b61f81"
     },
     {
       "kind": "app",
