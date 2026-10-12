@@ -22,7 +22,8 @@ guide: packaging, stable Releases, enrollment PRs, review, updates, and troubles
 2. Make a pull request that adds one record to `registry.json` and one record
    to `approvals.json`. The enrollment contains the extension kind, safe id,
    `owner/repository`, and publisher name. The approval contains the kind, id,
-   release tag, and the ZIP SHA-256 from the entry metadata.
+   release tag, and the ZIP SHA-256 from the entry metadata; it may also carry
+   `readme`, the reviewed Markdown introduction shown in the store.
 3. Maintainers review that exact package and merge the pull request. The
    market workflow publishes only approved packages and atomically updates the
    index when every changed approval validates. Enrollments without an
@@ -30,7 +31,11 @@ guide: packaging, stable Releases, enrollment PRs, review, updates, and troubles
 
 Every update follows the same review: the author publishes a new stable
 release and opens a pull request that changes the tag and SHA-256 in
-`approvals.json`. Nothing is discovered or published automatically.
+`approvals.json`. Nothing is discovered or published automatically. Changing
+only the introduction is also a reviewed change: edit the approval's `readme`
+in a pull request. The index copies that text and never fetches an author URL,
+so the storefront cannot change without a merged PR; an item without a snapshot
+shows no reviewed introduction, and market READMEs never load remote images.
 
 For apps, connectors, roles, and bundles the entry asset is named
 `<kind>-<id>-<version>.entry.json`. Skills and recipes use

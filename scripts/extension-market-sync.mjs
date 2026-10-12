@@ -35,6 +35,8 @@ function isCapabilityName(value) {
 // shared/extension-market-index.ts
 var MARKET_INDEX_SCHEMA_VERSION = 2;
 var MAX_MARKET_ARCHIVE_BYTES = 300 * 1024 * 1024;
+var MAX_MARKET_README_BYTES = 2 * 1024 * 1024;
+var MAX_MARKET_INDEX_BYTES = 8 * 1024 * 1024;
 function isPlainObject(value) {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
@@ -145,6 +147,7 @@ function describeMarketItem(raw, path2) {
   if (raw.icon !== void 0 && typeof raw.icon !== "string") return `${path2}.icon must be a string`;
   if (raw.categories !== void 0 && !isStringArray(raw.categories)) return `${path2}.categories must be an array of strings`;
   if (raw.keywords !== void 0 && !isStringArray(raw.keywords)) return `${path2}.keywords must be an array of strings`;
+  if (raw.readme !== void 0 && typeof raw.readme !== "string") return `${path2}.readme must be a string`;
   if (raw.readmeUrl !== void 0 && typeof raw.readmeUrl !== "string") return `${path2}.readmeUrl must be a string`;
   if (raw.stats !== void 0) {
     const statsError = describeStats(raw.stats, `${path2}.stats`);
@@ -805,12 +808,21 @@ function enrollmentKey(record) {
 }
 function readApprovalRecord(approval, label) {
   if (!isPlainObject2(approval)) throw new Error(`${label} must be an object`);
-  exactKeys(approval, ["kind", "id", "tag", "sha256"], label);
+  exactKeys(approval, ["kind", "id", "tag", "sha256", "readme"], label);
   if (!isExtensionKind(approval.kind)) throw new Error(`${label}.kind must be one of ${EXTENSION_KINDS.join(", ")}`);
   if (!isSafeExtensionId(approval.id)) throw new Error(`${label}.id is not a safe extension id`);
   if (typeof approval.tag !== "string" || !TAG_RE.test(approval.tag)) throw new Error(`${label}.tag must be a release tag of letters, digits, ".", "_", "+", or "-"`);
   if (typeof approval.sha256 !== "string" || !SHA256_RE.test(approval.sha256)) throw new Error(`${label}.sha256 must be 64 lowercase hexadecimal characters`);
-  return { kind: approval.kind, id: approval.id, tag: approval.tag, sha256: approval.sha256 };
+  const readme = readApprovedReadme(approval, label);
+  return { kind: approval.kind, id: approval.id, tag: approval.tag, sha256: approval.sha256, ...readme === null ? {} : { readme } };
+}
+function readApprovedReadme(approval, label) {
+  if (approval.readme === void 0) return null;
+  if (typeof approval.readme !== "string") throw new Error(`${label}.readme must be a string`);
+  if (!approval.readme.trim()) throw new Error(`${label}.readme must be a non-empty Markdown string; delete the field to publish without a reviewed introduction`);
+  const bytes = Buffer.byteLength(approval.readme, "utf8");
+  if (bytes > MAX_MARKET_README_BYTES) throw new Error(`${label}.readme must be no longer than ${MAX_MARKET_README_BYTES} bytes`);
+  return approval.readme;
 }
 function readApprovalList(raw) {
   if (!isPlainObject2(raw)) throw new Error("approvals must be a JSON object");
@@ -987,7 +999,19 @@ function projectEntry(entry, registration, archiveUrl) {
   };
   delete projected.versions;
   delete projected.stats;
+  delete projected.readme;
+  delete projected.readmeUrl;
   return projected;
+}
+function indexPayloadBytes(index) {
+  return Buffer.byteLength(`${JSON.stringify(index, null, 2)}
+`, "utf8");
+}
+function assertIndexFitsClientPayload(index) {
+  const bytes = indexPayloadBytes(index);
+  if (bytes > MAX_MARKET_INDEX_BYTES) {
+    throw new Error(`generated index is ${bytes} bytes, above the ${MAX_MARKET_INDEX_BYTES}-byte payload limit clients accept; trim README snapshots or entries`);
+  }
 }
 function strictIndex(raw, label) {
   const result = validateMarketIndexV2(raw);
@@ -1129,9 +1153,12 @@ async function withDownloadStats(item, registration, previousStats, options, war
     return kept;
   }
 }
-function withReadme(item, registration, approval) {
-  if (item.readmeUrl) return item;
-  return { ...item, readmeUrl: `https://raw.githubusercontent.com/${registration.repository}/${encodeURIComponent(approval.tag)}/README.md` };
+function withApprovedReadme(item, approval) {
+  const next = { ...item };
+  delete next.readmeUrl;
+  if (approval.readme !== void 0) next.readme = approval.readme;
+  else delete next.readme;
+  return next;
 }
 function reusablePublishedItem(item, registration, approval) {
   if (!item || item.publisher !== registration.publisher || item.archive.sha256 !== approval.sha256) return null;
@@ -1156,12 +1183,12 @@ async function synchronizeMarket({ registry, approvals, previousIndex = null, fe
     const published = previousItems.get(enrollmentKey(registration));
     const reusable = reusablePublishedItem(published, registration, approval);
     if (reusable) {
-      items.push(await withDownloadStats(withReadme(reusable, registration, approval), registration, reusable.stats, statsOptions, warnings));
+      items.push(await withDownloadStats(withApprovedReadme(reusable, approval), registration, reusable.stats, statsOptions, warnings));
       continue;
     }
     try {
       const { candidate } = await readReleaseCandidate(registration, { approval, fetchImpl, token });
-      const item = withReadme(historyFor(published, candidate, registration), registration, approval);
+      const item = withApprovedReadme(historyFor(published, candidate, registration), approval);
       items.push(await withDownloadStats(item, registration, published?.stats, statsOptions, warnings));
     } catch (error) {
       failures.push(`${registration.kind}/${registration.id} (${registration.repository}): ${error instanceof Error ? error.message : String(error)}`);
@@ -1183,6 +1210,7 @@ ${failures.map((failure) => `- ${failure}`).join("\n")}`);
     draft.publishedAt = new Date(Math.max(requestedMs, previousMs + 1)).toISOString();
   }
   const index = strictIndex(draft, "generated index");
+  assertIndexFitsClientPayload(index);
   const unchanged = Boolean(previous && deepEqual(index, previous));
   return { index, unchanged, pending, warnings };
 }
