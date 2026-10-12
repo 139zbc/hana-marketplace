@@ -82,8 +82,8 @@
     {
       "kind": "app",
       "id": "hana-downloader",
-      "tag": "v1.1.2",
-      "sha256": "902d5e6c2d0dbf9a3ec4b061a6202f7e079f67ff2df04b8a5d405796c0951f7d"
+      "tag": "v1.1.4",
+      "sha256": "972098da311c39c27ac3faa86977f94edebfe39c654440889e1c6fd86bcca51d"
     },
     {
       "kind": "app",
