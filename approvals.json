@@ -552,6 +552,12 @@
       "id": "hana-remote-access",
       "tag": "v1.0.1",
       "sha256": "0e462301d1d926e5e2ee8bb5f69d181669567e6313af6847c9d23a88b19b488b"
+    },
+    {
+      "kind": "app",
+      "id": "tigexing-app",
+      "tag": "v0.1.0",
+      "sha256": "82e0e9ab19193959055b9486957f6b3e4b83d2d81e008846de6ae8c95978478d"
     }
   ]
 }
