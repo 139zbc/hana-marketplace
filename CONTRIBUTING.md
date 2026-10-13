@@ -75,6 +75,7 @@ Fork 本仓库，同一个 PR 修改两个文件，保留现有条目。
 - `tag` 是包含条目 JSON 和 ZIP 的 Release tag；`sha256` 照抄条目 JSON 中的 `archive.sha256`，不要自行计算或修改。
 - `repository` 使用 `owner/repository`，不是完整 URL。
 - 可选 `readme` 是商店详情里展示的介绍正文（Markdown）。它随 PR 一起审核、写进市场索引，发布后不再从作者仓库的 URL 活取；要改介绍就改这里，同样要经 PR 审核。单条上限 2 MiB。老条目没有这个字段时，商店显示「暂无已审核介绍」。市场介绍不加载远程图片。
+- 作者不强制自行撰写 `readme`：维护者可从已批准的 Release 收集并审核介绍正文与配图后代作者写入，无需作者重复提交快照；只改介绍仍走 PR 审核，无 `readme` 时商店显示「暂无已审核介绍」。
 - 除非维护者要求批量变更，一个 PR 只登记一个扩展。
 - **不要手工编辑 `index.v2.json`**，也不要为投稿修改同步器或工作流。
 - 按 [PR 模板](.github/PULL_REQUEST_TEMPLATE.md)填写下面的审阅材料，便于维护者在 PR 正文中直接查看。
@@ -196,7 +197,7 @@ Append the package to publish to the `approvals` array in `approvals.json`. Exam
 }
 ```
 
-Both files keep `schemaVersion: 1`. The kind, id, and publisher must match the packer output. Use `owner/repository`, not a full URL. `tag` is the Release that contains the entry JSON and ZIP; copy `sha256` from `archive.sha256` in the entry JSON instead of computing or editing it. An approval may also carry `readme`: the reviewed Markdown introduction shown in the store. It is copied into the index and never fetched from an author URL, so changing the introduction also needs a pull request; a single introduction is capped at 2 MiB, and an item without one shows no reviewed introduction. The market README never loads remote images. Submit one enrollment per PR unless maintainers request a batch.
+Both files keep `schemaVersion: 1`. The kind, id, and publisher must match the packer output. Use `owner/repository`, not a full URL. `tag` is the Release that contains the entry JSON and ZIP; copy `sha256` from `archive.sha256` in the entry JSON instead of computing or editing it. An approval may also carry `readme`: the reviewed Markdown introduction shown in the store. It is copied into the index and never fetched from an author URL, so changing the introduction also needs a pull request; a single introduction is capped at 2 MiB, and an item without one shows no reviewed introduction. The market README never loads remote images. Authors are not required to write `readme` themselves: a maintainer may collect and review the introduction and images from the approved release and fill `readme` on the author's behalf; changing only the introduction still needs a pull request, and an item without `readme` shows no reviewed introduction. Submit one enrollment per PR unless maintainers request a batch.
 
 Complete the review materials in the [PR template](.github/PULL_REQUEST_TEMPLATE.md). **Do not edit `index.v2.json` manually** or change the synchronizer or workflows as part of an enrollment.
 
