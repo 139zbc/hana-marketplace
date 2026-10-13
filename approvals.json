@@ -564,6 +564,12 @@
       "id": "hana-model-viewer",
       "tag": "v3.1.0",
       "sha256": "21afd30cc3019b2a1fd23c5ccc90a9723f18ae83e3cdb7061af7bf7e74554720"
+    },
+    {
+      "kind": "app",
+      "id": "comfyui-hana",
+      "tag": "v0.12.0",
+      "sha256": "77c764b7b3e24a918fa9a1c25125751bfb3e37a44ac5eab06dd25d58e3450abe"
     }
   ]
 }

@@ -564,6 +564,12 @@
       "id": "hana-model-viewer",
       "repository": "JohnGalt0802/hana-model-viewer",
       "publisher": "John Galt"
+    },
+    {
+      "kind": "app",
+      "id": "comfyui-hana",
+      "repository": "JohnGalt0802/hana-comfyui",
+      "publisher": "John Galt"
     }
   ]
 }
