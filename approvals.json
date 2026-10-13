@@ -10,8 +10,8 @@
     {
       "kind": "app",
       "id": "doc-intake",
-      "tag": "v3.0.0",
-      "sha256": "2587a4a28e6c7b13765d6bfa980ecaaf4c17090b73f469b92ec51f6771cecf35"
+      "tag": "v3.1.0",
+      "sha256": "40486a9d04b012eca6b0567f3aa7e3c5d82df6f8f8c180c13d9b6361f75bf4de"
     },
     {
       "kind": "app",
