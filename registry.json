@@ -558,6 +558,12 @@
       "id": "tigexing-app",
       "repository": "moononnn/hanako-tigexing-app",
       "publisher": "moononnn & 小花"
+    },
+    {
+      "kind": "app",
+      "id": "hana-model-viewer",
+      "repository": "JohnGalt0802/hana-model-viewer",
+      "publisher": "John Galt"
     }
   ]
 }

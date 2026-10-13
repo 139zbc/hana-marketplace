@@ -558,6 +558,12 @@
       "id": "tigexing-app",
       "tag": "v0.1.0",
       "sha256": "82e0e9ab19193959055b9486957f6b3e4b83d2d81e008846de6ae8c95978478d"
+    },
+    {
+      "kind": "app",
+      "id": "hana-model-viewer",
+      "tag": "v3.1.0",
+      "sha256": "21afd30cc3019b2a1fd23c5ccc90a9723f18ae83e3cdb7061af7bf7e74554720"
     }
   ]
 }
