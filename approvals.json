@@ -540,6 +540,12 @@
       "id": "hanako-simple-player",
       "tag": "v1.1.0-simple",
       "sha256": "a1f1f110fd3238e19116d5c7cdf0aeb927e41f21a0277569d5533113d9358aa8"
+    },
+    {
+      "kind": "app",
+      "id": "feishu-push",
+      "tag": "v2.0.1",
+      "sha256": "fd6e44d472b6b322fc2461d6d9acd71a83bdf99384d5c3ddde091dd1f97b8432"
     }
   ]
 }

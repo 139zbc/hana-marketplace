@@ -540,6 +540,12 @@
       "id": "hanako-simple-player",
       "repository": "wqh0201-stack/hanako-simple-player",
       "publisher": "wqh0201-stack"
+    },
+    {
+      "kind": "app",
+      "id": "feishu-push",
+      "repository": "Liu-MouRen/feishu-push",
+      "publisher": "Kai_Chen"
     }
   ]
 }
