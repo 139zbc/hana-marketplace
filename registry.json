@@ -546,6 +546,12 @@
       "id": "feishu-push",
       "repository": "Liu-MouRen/feishu-push",
       "publisher": "Kai_Chen"
+    },
+    {
+      "kind": "app",
+      "id": "hana-remote-access",
+      "repository": "TomDarkWay/hana-remote-access",
+      "publisher": "TomDarkWay"
     }
   ]
 }

@@ -546,6 +546,12 @@
       "id": "feishu-push",
       "tag": "v2.0.1",
       "sha256": "fd6e44d472b6b322fc2461d6d9acd71a83bdf99384d5c3ddde091dd1f97b8432"
+    },
+    {
+      "kind": "app",
+      "id": "hana-remote-access",
+      "tag": "v1.0.1",
+      "sha256": "0e462301d1d926e5e2ee8bb5f69d181669567e6313af6847c9d23a88b19b488b"
     }
   ]
 }
