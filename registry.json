@@ -62,6 +62,528 @@
       "publisher": "Swimming Cat"
     },
     {
+      "kind": "app",
+      "id": "dshana",
+      "repository": "Nyasers/DSHana",
+      "publisher": "Nyasers"
+    },
+    {
+      "kind": "app",
+      "id": "eleckoi-tavern",
+      "repository": "openhanako-labs/openhanako-tavern",
+      "publisher": "Yuexiye"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-audio-player",
+      "repository": "openhanako-labs/openhanako-audio-player",
+      "publisher": "Yuexiye"
+    },
+    {
+      "kind": "app",
+      "id": "hana-downloader",
+      "repository": "JohnGalt0802/hana-downloader",
+      "publisher": "John Galt"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-mail",
+      "repository": "openhanako-labs/openhanako-mail",
+      "publisher": "Yuexiye"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-gallery",
+      "repository": "openhanako-labs/openhanako-gallery",
+      "publisher": "Yuexiye"
+    },
+    {
+      "kind": "app",
+      "id": "chahuahui",
+      "repository": "moononnn/Hanako-chahuahui",
+      "publisher": "moononnn & 小花"
+    },
+    {
+      "kind": "app",
+      "id": "biaoqingbao-app",
+      "repository": "moononnn/hanako-biaoqingbao-app",
+      "publisher": "moononnn & 小花"
+    },
+    {
+      "kind": "app",
+      "id": "shiguangji-app",
+      "repository": "moononnn/hanako-shiguangji-app",
+      "publisher": "moononnn & 小花"
+    },
+    {
+      "kind": "app",
+      "id": "hana-excalidraw",
+      "repository": "139zbc/HanaAgent-plugins-HanaExcalidraw",
+      "publisher": "139zbc"
+    },
+    {
+      "kind": "app",
+      "id": "github-cli",
+      "repository": "hayou2002/hana-github-cli",
+      "publisher": "hayou2002"
+    },
+    {
+      "kind": "skill",
+      "id": "hana-vibecoding",
+      "repository": "hayou2002/hana-vibecoding",
+      "publisher": "hayou2002"
+    },
+    {
+      "kind": "app",
+      "id": "voiceloop",
+      "repository": "givfei5-hash/openhanako-voiceloop-app",
+      "publisher": "givfei5-hash"
+    },
+    {
+      "kind": "app",
+      "id": "minimax-video",
+      "repository": "Doubi250/hana-app-minimax-video",
+      "publisher": "Doubi250"
+    },
+    {
+      "kind": "app",
+      "id": "hana-vault",
+      "repository": "zhang8019/hana-vault-app",
+      "publisher": "元一"
+    },
+    {
+      "kind": "connector",
+      "id": "context7",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "microsoft-learn",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "aws-knowledge",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "cloudflare-docs",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "huggingface",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "exa",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "jina",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "notion",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "linear",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "sentry",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "stripe",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "supabase",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "vercel",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "figma",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "paypal",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "neon",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "netlify",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "webflow",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "wix",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "intercom",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "square",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "monday",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "cloudflare-bindings",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "cloudflare-observability",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "prisma",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "jam",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "miro",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "clickup",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "todoist",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "gitlab",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "dropbox",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "apify",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "postman",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "mapbox",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "semgrep",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "github",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "tencent-docs",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "edgeone-pages",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "gitee",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "bailian-amap",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "bailian-websearch",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "zhipu-websearch",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "zhipu-webreader",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "zhipu-zread",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "tencent-map",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "amap",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "baidu-map",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "baidu-ai-search",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "dingtalk-docs",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "dingtalk-calendar",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "dingtalk-todo",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "dingtalk-contacts",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "dingtalk-ai-table",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "connector",
+      "id": "modelscope",
+      "repository": "liliMozi/hana-connectors",
+      "publisher": "liliMozi"
+    },
+    {
+      "kind": "app",
+      "id": "hana-powercontext",
+      "repository": "SeptTpes/hana-powercontext",
+      "publisher": "SeptTpes"
+    },
+    {
+      "kind": "app",
+      "id": "agent-model-plan",
+      "repository": "Codemaker997/agent-model-plan",
+      "publisher": "Codemaker997"
+    },
+    {
+      "kind": "app",
+      "id": "prompt-studio",
+      "repository": "n3ko3n/HanaAgent-prompt-studio",
+      "publisher": "n3ko3n"
+    },
+    {
+      "kind": "app",
+      "id": "office-toolkit",
+      "repository": "zhang8019/hana-office-toolkit",
+      "publisher": "元一"
+    },
+    {
+      "kind": "app",
+      "id": "bookmate",
+      "repository": "a13188087907/bookmate",
+      "publisher": "XuJC"
+    },
+    {
+      "kind": "app",
+      "id": "paper-structure-modeling",
+      "repository": "SNLCC/paper-structure-modeling",
+      "publisher": "论文结构建模"
+    },
+    {
+      "kind": "app",
+      "id": "magpie-hana",
+      "repository": "H-i-m-s/magpie-hana",
+      "publisher": "H-i-m-s"
+    },
+    {
+      "kind": "app",
+      "id": "xianhuaniang",
+      "repository": "moononnn/xianhuaniang",
+      "publisher": "moononnn & 小花"
+    },
+    {
+      "kind": "app",
+      "id": "bilibili-intake-v2",
+      "repository": "openhanako-labs/openhanako-bilibili-intake",
+      "publisher": "ophelia"
+    },
+    {
+      "kind": "app",
+      "id": "notification-hub",
+      "repository": "shenmingganlin/notification-hub",
+      "publisher": "Ganlin"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-simple-player",
+      "repository": "wqh0201-stack/hanako-simple-player",
+      "publisher": "wqh0201-stack"
+    },
+    {
+      "kind": "app",
+      "id": "feishu-push",
+      "repository": "Liu-MouRen/feishu-push",
+      "publisher": "Kai_Chen"
+    },
+    {
+      "kind": "app",
+      "id": "hana-remote-access",
+      "repository": "TomDarkWay/hana-remote-access",
+      "publisher": "TomDarkWay"
+    },
+    {
+      "kind": "app",
+      "id": "tigexing-app",
+      "repository": "moononnn/hanako-tigexing-app",
+      "publisher": "moononnn & 小花"
+    },
+    {
+      "kind": "app",
+      "id": "hana-model-viewer",
+      "repository": "JohnGalt0802/hana-model-viewer",
+      "publisher": "John Galt"
+    },
+    {
+      "kind": "app",
+      "id": "comfyui-hana",
+      "repository": "JohnGalt0802/hana-comfyui",
+      "publisher": "John Galt"
+    },
+    {
+      "kind": "app",
+      "id": "local-vector-memory",
+      "repository": "Raizombie/local-vector-memory",
+      "publisher": "Raison"
+    },
+    {
+      "kind": "app",
+      "id": "agent-workflow-canvas",
+      "repository": "yueeeee8588/agent-workflow-canvas",
+      "publisher": "Yue"
+    },
+    {
       "kind": "recipe",
       "id": "hana-card-templates",
       "repository": "openhanako-labs/openhanako-sundries",

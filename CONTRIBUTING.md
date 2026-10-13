@@ -62,7 +62,8 @@ Fork 本仓库，同一个 PR 修改两个文件，保留现有条目。
       "kind": "app",
       "id": "example-app",
       "tag": "v1.0.0",
-      "sha256": "<条目 JSON 中 archive.sha256 的值>"
+      "sha256": "<条目 JSON 中 archive.sha256 的值>",
+      "readme": "# Example App\n\n商店里展示的介绍正文。"
     }
   ]
 }
@@ -73,6 +74,8 @@ Fork 本仓库，同一个 PR 修改两个文件，保留现有条目。
 - `kind`、`id` 和 `publisher` 必须与打包生成的条目一致。
 - `tag` 是包含条目 JSON 和 ZIP 的 Release tag；`sha256` 照抄条目 JSON 中的 `archive.sha256`，不要自行计算或修改。
 - `repository` 使用 `owner/repository`，不是完整 URL。
+- 可选 `readme` 是商店详情里展示的介绍正文（Markdown）。它随 PR 一起审核、写进市场索引，发布后不再从作者仓库的 URL 活取；要改介绍就改这里，同样要经 PR 审核。单条上限 2 MiB。老条目没有这个字段时，商店显示「暂无已审核介绍」。市场介绍不加载远程图片。
+- 作者不强制自行撰写 `readme`：维护者可从已批准的 Release 收集并审核介绍正文与配图后代作者写入，无需作者重复提交快照；只改介绍仍走 PR 审核，无 `readme` 时商店显示「暂无已审核介绍」。
 - 除非维护者要求批量变更，一个 PR 只登记一个扩展。
 - **不要手工编辑 `index.v2.json`**，也不要为投稿修改同步器或工作流。
 - 按 [PR 模板](.github/PULL_REQUEST_TEMPLATE.md)填写下面的审阅材料，便于维护者在 PR 正文中直接查看。
@@ -119,6 +122,7 @@ PR 检查使用基线分支的同步器读取候选文件，不执行投稿代�
 4. 维护者审核并合并后，新版本才会上架；合并前用户看到的仍是旧版本。
 
 - 登记信息（如仓库或发布者）变化时，同样在 PR 中修改 `registry.json`。
+- 只改介绍（`readme`）也需要提 PR：不必发布新 Release，但同样要维护者审核合并、成功发布索引后才会更新商店展示。
 - 对有语义化版本的扩展，请发布更高版本；不要降级，也不要用新安装包替换已发布的同一版本。
 - Skill / Recipe 按内容哈希更新，条目中的 `0.0.0` 不需要人为递增。
 - 上架后修改、替换或删除 Release 附件，不会改变用户安装到的内容：客户端按批准的 SHA-256 校验下载，不一致或附件缺失时安装直接失败。
@@ -188,11 +192,12 @@ Append the package to publish to the `approvals` array in `approvals.json`. Exam
   "kind": "app",
   "id": "example-app",
   "tag": "v1.0.0",
-  "sha256": "<archive.sha256 from the entry JSON>"
+  "sha256": "<archive.sha256 from the entry JSON>",
+  "readme": "# Example App\n\nThe introduction shown in the store."
 }
 ```
 
-Both files keep `schemaVersion: 1`. The kind, id, and publisher must match the packer output. Use `owner/repository`, not a full URL. `tag` is the Release that contains the entry JSON and ZIP; copy `sha256` from `archive.sha256` in the entry JSON instead of computing or editing it. Submit one enrollment per PR unless maintainers request a batch.
+Both files keep `schemaVersion: 1`. The kind, id, and publisher must match the packer output. Use `owner/repository`, not a full URL. `tag` is the Release that contains the entry JSON and ZIP; copy `sha256` from `archive.sha256` in the entry JSON instead of computing or editing it. An approval may also carry `readme`: the reviewed Markdown introduction shown in the store. It is copied into the index and never fetched from an author URL, so changing the introduction also needs a pull request; a single introduction is capped at 2 MiB, and an item without one shows no reviewed introduction. The market README never loads remote images. Authors are not required to write `readme` themselves: a maintainer may collect and review the introduction and images from the approved release and fill `readme` on the author's behalf; changing only the introduction still needs a pull request, and an item without `readme` shows no reviewed introduction. Submit one enrollment per PR unless maintainers request a batch.
 
 Complete the review materials in the [PR template](.github/PULL_REQUEST_TEMPLATE.md). **Do not edit `index.v2.json` manually** or change the synchronizer or workflows as part of an enrollment.
 
@@ -238,6 +243,7 @@ PR validation uses the base branch's synchronizer and does not execute submitted
 4. The new version is published only after maintainers review and merge the PR. Until then, users keep seeing the published version.
 
 - To change registration details, such as repository or publisher, edit `registry.json` in the PR as well.
+- Changing only the introduction (`readme`) also needs a PR: no new Release is required, but the storefront updates only after a maintainer merges it and the index publishes.
 - Versioned extensions must not downgrade or replace an existing version's archive. Skills and recipes update by content hash and retain `0.0.0` in their entry metadata.
 - Changing, replacing, or deleting Release assets after publication does not change what users install. Clients verify downloads against the approved SHA-256; a mismatched or missing asset fails installation.
 - Catalog updates never install or update extensions automatically for users.
