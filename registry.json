@@ -576,6 +576,12 @@
       "id": "local-vector-memory",
       "repository": "Raizombie/local-vector-memory",
       "publisher": "Raison"
+    },
+    {
+      "kind": "app",
+      "id": "agent-workflow-canvas",
+      "repository": "yueeeee8588/agent-workflow-canvas",
+      "publisher": "Yue"
     }
   ]
 }

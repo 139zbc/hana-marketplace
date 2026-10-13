@@ -576,6 +576,12 @@
       "id": "local-vector-memory",
       "tag": "v1.0.0",
       "sha256": "8f377447c340350d3a9f630f7ce6b5a37dfd0e8e24a3ba7eb5450bf29684d9f9"
+    },
+    {
+      "kind": "app",
+      "id": "agent-workflow-canvas",
+      "tag": "v2.4.1",
+      "sha256": "efe521d1a0738d6291cc746932803f292a4233d1e77136295d7e3c094f3b9ecc"
     }
   ]
 }
