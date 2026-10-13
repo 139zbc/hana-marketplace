@@ -522,6 +522,12 @@
       "id": "xianhuaniang",
       "tag": "v0.1.2",
       "sha256": "946e3400223de4d4dafa501679723e9f4899664be81eac1c8a172a14624f21a9"
+    },
+    {
+      "kind": "app",
+      "id": "bilibili-intake-v2",
+      "tag": "v0.6.69",
+      "sha256": "1c23bac5c2dd012d7c8336d1de4e0b76e9474026021bc9bcb63c5f0f85f3b0db"
     }
   ]
 }

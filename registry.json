@@ -522,6 +522,12 @@
       "id": "xianhuaniang",
       "repository": "moononnn/xianhuaniang",
       "publisher": "moononnn & 小花"
+    },
+    {
+      "kind": "app",
+      "id": "bilibili-intake-v2",
+      "repository": "openhanako-labs/openhanako-bilibili-intake",
+      "publisher": "ophelia"
     }
   ]
 }
