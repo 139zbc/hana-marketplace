@@ -528,6 +528,12 @@
       "id": "bilibili-intake-v2",
       "tag": "v0.6.69",
       "sha256": "1c23bac5c2dd012d7c8336d1de4e0b76e9474026021bc9bcb63c5f0f85f3b0db"
+    },
+    {
+      "kind": "app",
+      "id": "notification-hub",
+      "tag": "v0.3.55",
+      "sha256": "8aa536b9b98aa4e69aa8cce6a1577a30cbd02bea438d147174f74bf3c13cb9bf"
     }
   ]
 }

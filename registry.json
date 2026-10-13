@@ -528,6 +528,12 @@
       "id": "bilibili-intake-v2",
       "repository": "openhanako-labs/openhanako-bilibili-intake",
       "publisher": "ophelia"
+    },
+    {
+      "kind": "app",
+      "id": "notification-hub",
+      "repository": "shenmingganlin/notification-hub",
+      "publisher": "Ganlin"
     }
   ]
 }
