@@ -570,6 +570,12 @@
       "id": "comfyui-hana",
       "repository": "JohnGalt0802/hana-comfyui",
       "publisher": "John Galt"
+    },
+    {
+      "kind": "app",
+      "id": "local-vector-memory",
+      "repository": "Raizombie/local-vector-memory",
+      "publisher": "Raison"
     }
   ]
 }
