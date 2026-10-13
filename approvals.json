@@ -142,8 +142,8 @@
     {
       "kind": "app",
       "id": "minimax-video",
-      "tag": "v0.1.7",
-      "sha256": "970b84b36b3c4fcb5c34745f014600849fa7a1d43243f93f020448cf722a1c9d"
+      "tag": "v0.3.1",
+      "sha256": "54c1a858f57cfff684a2e13fe0f523098bfa2477ded5ff60a068a6dd1b58d72f"
     },
     {
       "kind": "app",
