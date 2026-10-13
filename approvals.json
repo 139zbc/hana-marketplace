@@ -534,6 +534,12 @@
       "id": "notification-hub",
       "tag": "v0.3.55",
       "sha256": "8aa536b9b98aa4e69aa8cce6a1577a30cbd02bea438d147174f74bf3c13cb9bf"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-simple-player",
+      "tag": "v1.1.0-simple",
+      "sha256": "a1f1f110fd3238e19116d5c7cdf0aeb927e41f21a0277569d5533113d9358aa8"
     }
   ]
 }

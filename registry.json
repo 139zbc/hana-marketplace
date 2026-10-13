@@ -534,6 +534,12 @@
       "id": "notification-hub",
       "repository": "shenmingganlin/notification-hub",
       "publisher": "Ganlin"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-simple-player",
+      "repository": "wqh0201-stack/hanako-simple-player",
+      "publisher": "wqh0201-stack"
     }
   ]
 }
