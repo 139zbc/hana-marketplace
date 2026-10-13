@@ -516,6 +516,12 @@
       "id": "magpie-hana",
       "tag": "v1.1.0",
       "sha256": "1ef25d17716f2076750a69d748fa65d777fcc7f7a11c74e78045c3fc09e976ff"
+    },
+    {
+      "kind": "app",
+      "id": "xianhuaniang",
+      "tag": "v0.1.2",
+      "sha256": "946e3400223de4d4dafa501679723e9f4899664be81eac1c8a172a14624f21a9"
     }
   ]
 }

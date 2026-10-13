@@ -516,6 +516,12 @@
       "id": "magpie-hana",
       "repository": "H-i-m-s/magpie-hana",
       "publisher": "H-i-m-s"
+    },
+    {
+      "kind": "app",
+      "id": "xianhuaniang",
+      "repository": "moononnn/xianhuaniang",
+      "publisher": "moononnn & 小花"
     }
   ]
 }
