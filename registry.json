@@ -582,6 +582,12 @@
       "id": "agent-workflow-canvas",
       "repository": "yueeeee8588/agent-workflow-canvas",
       "publisher": "Yue"
+    },
+    {
+      "kind": "app",
+      "id": "hanako-runtime-learner",
+      "repository": "326sun/Hanako-runtime-learner",
+      "publisher": "Sun"
     }
   ]
 }
