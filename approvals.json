@@ -749,6 +749,12 @@
       "tag": "v1.0.1",
       "sha256": "7e5e7b34ca7173b8abe39281a821fbe8b1f70cd28e95e50a8fe36aaffbdf57d4",
       "readme": "# Hana Zotero MCP Connector\n\n通过本地 stdio MCP 服务连接 Zotero，检索文献、读取元数据与批注。使用前需安装 Zotero MCP server，并确保 Hana 能从 PATH 启动 `zotero-mcp`；连接器不包含凭据，也不自动更新上游软件。\n\n## 功能与限制\n\n连接器发现上游工具并将其交给 Hana MCP runtime。Zotero MCP 0.14.1 握手发现 41 项工具。工具集包含写入和删除操作，Hana 默认按需审核；作者未执行这些变更操作的功能回归。语义检索或批处理的外部服务取决于 Zotero MCP 自身配置。\n\n## 测试\n\nHana 1.1.0-beta，Windows NT 10.0.26300。通过 Hana 正式扩展流程安装；stdio initialize 和 tools/list 成功，Hana 状态 running，41 tools，0 collisions。市场 Release 安装尚未测试。\n\n## 权限与服务\n\n无额外 Hana permission 声明。使用本地 Zotero MCP server；Zotero MCP 可能按用户配置访问本机 Zotero 数据或其他已配置服务。无凭据随包。\n\n## 图标\n\n使用 Zotero 官方图标，仅用于识别连接对象。Zotero 商标与图标归其权利人所有，本连接器未经官方背书。\n\n## 许可\n\n连接器文件和文档适用 MIT；第三方图标不包含在该授权内。"
+    },
+    {
+      "kind": "recipe",
+      "id": "hana-card-templates",
+      "tag": "recipe-2026-10-11",
+      "sha256": "989567b871bf44fab091e8f0d1778ff9ccbed2cd91e56165f26650b53ab8caea"
     }
   ]
 }

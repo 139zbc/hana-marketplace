@@ -642,6 +642,12 @@
       "id": "zotero",
       "repository": "XZJ-top/hana-zotero-obsidian-connectors",
       "publisher": "XZJ"
+    },
+    {
+      "kind": "recipe",
+      "id": "hana-card-templates",
+      "repository": "openhanako-labs/openhanako-sundries",
+      "publisher": "Yuexiye"
     }
   ]
 }
