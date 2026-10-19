@@ -693,6 +693,13 @@
       "tag": "console-0.6.6",
       "sha256": "9790f8bdf40f23baa1ae1c3116d846b74ecd7f57c1af251082677a238c5e0053",
       "readme": "# Hana 桌宠控制台\n\n把 Hana 正在做的事，变成一个在桌面上动起来的角色。\n\n## 它做什么\n\n控制台订阅 Hana 的会话事件，只读取会话标题、Agent、工具名、状态和时间戳，整理成脱敏快照，推给本机独立的桌宠进程。桌宠再把这些状态翻成具体动作：Hana 在想事情，它歪头思考；Hana 在读文件，它翻书；命令跑起来，它跟着跑。\n\n角色共 7 个，211 张透明姿态图，单击会开心一下，按住能拖动，右键换角色或锁位置。\n\n## 需要另装桌宠\n\n**这个 App 只是控制台**，本身不画桌宠。请按平台另装：\n\n- **macOS**：下载 `console-0.6.5` Release 里的 `HanaDesktopPet-crosspet-v0.5.8-local.zip`，解压后右键 → 打开\n- **Windows**：下载 `windows-0.2.0` Release 里的 `HanaDesktopPet-windows-0.2.0-portable.zip`，解压后双击 exe\n\n两者都在同一个仓库的 Release 里，控制台界面在未连接时也会给出对应入口。\n\n## 隐私边界\n\n- 只接收脱敏状态：会话标题、状态、工具名、时间戳\n- 不接收消息正文，不读取工具参数或结果，不保存会话路径\n- App 后台只访问本机回环 `127.0.0.1:43127`，不上传会话内容；下载是你点击后由系统浏览器访问 GitHub\n- 需要两项授权：`app/sessions.read` 读会话标题与 Agent 名称，`app/ui.open-external` 只用于你点击下载入口时打开固定的 Release 页面\n\n## 已知限制\n\n- 桌宠必须和控制台在**同一台机器**上，不是远程控制\n- 未签名（macOS ad-hoc / Windows 无证书），首次打开会被系统拦一次\n- 下载跳转依赖你点击并授权；未授权时面板会给出可复制链接\n- Windows 桌宠的编译与实机运行由作者本人在 Windows 上验证；本控制台 App 未在 Windows 上验证"
+    },
+    {
+      "kind": "connector",
+      "id": "tinyfish",
+      "tag": "v1.0.0",
+      "sha256": "fe13c4d463d4bb75b3e781912c864280b2379bf1bf40f5051acd1b1398e7de68",
+      "readme": "# TinyFish\n\n把 TinyFish 托管的远程 MCP 服务接进 Hana：实时网页搜索、网页正文抓取，以及按目标驱动的浏览器自动化。\n\n## 安装后\n\n在连接器详情页点一次登录，走完 TinyFish 的 OAuth 授权，工具就进模型工具表。搜索与抓取按 TinyFish 的额度免费。\n\n## 工具\n\n注册 32 个工具，常用的几个：\n\n- `search`：实时网页搜索，返回结构化结果（标题、链接、摘要、站点、排名）\n- `fetch_content`：抓取网页正文，输出 Markdown、JSON 或 HTML\n- `run_web_automation`：用一句自然语言描述目标，在真实浏览器里完成操作并取回数据\n- `create_monitor` / `list_monitors`：监控页面变化，变动时提醒\n- `create_browser_session`：可持久化的云端浏览器会话\n\n## 认证\n\nTinyFish 的 MCP 端点不接受 API key，只认 OAuth，所以这个包不包含任何凭据字段；登录令牌由 Hana 在本机保存，不经过包本身。\n\n端点：`https://agent.tinyfish.ai/mcp`（streamable-http）。"
     }
   ]
 }

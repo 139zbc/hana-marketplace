@@ -594,6 +594,12 @@
       "id": "hana-desktop-pet",
       "repository": "wqh0201-stack/hana-desk-pet",
       "publisher": "罐头（本地原型）"
+    },
+    {
+      "kind": "connector",
+      "id": "tinyfish",
+      "repository": "Nyasers/tinyfish",
+      "publisher": "Nyasers"
     }
   ]
 }
