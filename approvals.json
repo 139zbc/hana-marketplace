@@ -735,6 +735,13 @@
       "tag": "v0.1.0",
       "sha256": "9083e69bce42c7c20a9228bf6ef9621dce4fd81e97c3e2c423233ef21ccfa6c0",
       "readme": "# Hana快捷指令\n\n> 在输入栏点一下，把预设指令挂到这次输入上：发送时它按设置拼进提示词的头或尾。\n\n常用命令和提示词每次都要手打或复制粘贴，重复、打断节奏。这个应用把它们收成一张按 agent 分类的指令表。\n\n## 功能\n\n- **输入栏的 ⌘ 图标**：点开输入框上方的面板，列出当前 agent 的指令\n- **两种选法**：点条目，或按数字键 1–9（先匹配指令自己配的快捷键，再按列表序号）\n- **可取消**：选中的指令以「指令名 ×」标签挂在面板底部，点 × 取消\n- **发送即拼**：指令内容按各自设置拼到本次用户提示词的头或尾，不带标记，只作用于这一条消息\n- **按 agent 配置**：每个 agent 一张独立指令表，没单独配的继承「默认」表\n- **Agent 可用**：提供 quickcmd_open / list / upsert / delete 四个工具，可在设置里整体关闭\n\n## 拼到哪里由你定\n\n每条指令自己带「头部 / 尾部」设置：放头部适合先立规矩（比如「先给方案再动手」），放尾部适合加收口（比如「精简作答」）。\n\n## 权限\n\n需要输入栏按钮、输入框上方面板、改写入参的钩子，以及读写 agent / 会话列表的能力。无外部服务、无网络请求、无凭据。"
+    },
+    {
+      "kind": "connector",
+      "id": "obsidian-local",
+      "tag": "v1.0.1",
+      "sha256": "0a664e40335ed45b0ea0238e3ab74a6728518059516a1db3dc23787ecf98dcc7",
+      "readme": "# Hana Obsidian Local MCP Connector\n\n通过 Obsidian Local REST API with MCP 插件提供的 HTTPS Streamable HTTP MCP 连接本地 vault。使用前需在 Obsidian 启用插件，并在 Hana connector 设置中填写 API key。连接器包不含任何密钥。\n\n## 功能与限制\n\n可以发现并调用插件暴露的 vault 工具。插件具备笔记创建、更新、删除及其他操作能力；Hana 默认权限审核仍适用。该包不实现自动同步，也不保证保护用户自写区块。\n\n## 测试\n\nHana 1.1.0-beta，Windows NT 10.0.26300。Obsidian Local REST API with MCP 5.4.0。通过 Hana 正式扩展流程安装并填入 API key 后，连接器运行成功，发现 20 项工具，无 collisions。未执行笔记修改/删除测试。市场 Release 安装尚未测试。\n\n## 已知限制\n\nHana 当前 connector schema 没有按连接器单独指定 CA 的字段。用户的 Hana runtime 必须信任 Obsidian 本地 HTTPS 证书，否则握手失败。不要关闭 TLS 校验或切换到不安全 HTTP。若运行时需要 NODE_EXTRA_CA_CERTS，应在 Hana server 启动前配置该变量并完整重启；这会影响进程级 TLS 信任范围。\n\n## 权限与服务\n\n无额外 Hana permission 声明。通过本地回环地址访问 Obsidian Local REST API。API key 由用户在 Hana 安全存储字段输入，不随包或 PR 提交。\n\n## 图标\n\n使用 Obsidian 官网 apple-touch-icon，仅用于识别连接对象。Obsidian 商标与图标归其权利人所有，本连接器未经官方背书。\n\n## 许可\n\n连接器文件和文档适用 MIT；第三方图标不包含在该授权内。"
     }
   ]
 }

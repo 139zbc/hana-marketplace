@@ -630,6 +630,12 @@
       "id": "quick-cmd",
       "repository": "Magnemomet/hana-quick-cmd",
       "publisher": "Magnemomet"
+    },
+    {
+      "kind": "connector",
+      "id": "obsidian-local",
+      "repository": "XZJ-top/hana-zotero-obsidian-connectors",
+      "publisher": "XZJ"
     }
   ]
 }
