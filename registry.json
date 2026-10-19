@@ -636,6 +636,12 @@
       "id": "obsidian-local",
       "repository": "XZJ-top/hana-zotero-obsidian-connectors",
       "publisher": "XZJ"
+    },
+    {
+      "kind": "connector",
+      "id": "zotero",
+      "repository": "XZJ-top/hana-zotero-obsidian-connectors",
+      "publisher": "XZJ"
     }
   ]
 }
