@@ -588,6 +588,12 @@
       "id": "hanako-runtime-learner",
       "repository": "326sun/Hanako-runtime-learner",
       "publisher": "Sun"
+    },
+    {
+      "kind": "app",
+      "id": "hana-desktop-pet",
+      "repository": "wqh0201-stack/hana-desk-pet",
+      "publisher": "罐头（本地原型）"
     }
   ]
 }
