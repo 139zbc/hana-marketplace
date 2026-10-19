@@ -600,6 +600,12 @@
       "id": "tinyfish",
       "repository": "Nyasers/tinyfish",
       "publisher": "Nyasers"
+    },
+    {
+      "kind": "app",
+      "id": "repo-auto-index",
+      "repository": "X-J-S-C/repo-auto-index",
+      "publisher": "X-J-S-C"
     }
   ]
 }

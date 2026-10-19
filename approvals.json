@@ -700,6 +700,13 @@
       "tag": "v1.0.0",
       "sha256": "fe13c4d463d4bb75b3e781912c864280b2379bf1bf40f5051acd1b1398e7de68",
       "readme": "# TinyFish\n\n把 TinyFish 托管的远程 MCP 服务接进 Hana：实时网页搜索、网页正文抓取，以及按目标驱动的浏览器自动化。\n\n## 安装后\n\n在连接器详情页点一次登录，走完 TinyFish 的 OAuth 授权，工具就进模型工具表。搜索与抓取按 TinyFish 的额度免费。\n\n## 工具\n\n注册 32 个工具，常用的几个：\n\n- `search`：实时网页搜索，返回结构化结果（标题、链接、摘要、站点、排名）\n- `fetch_content`：抓取网页正文，输出 Markdown、JSON 或 HTML\n- `run_web_automation`：用一句自然语言描述目标，在真实浏览器里完成操作并取回数据\n- `create_monitor` / `list_monitors`：监控页面变化，变动时提醒\n- `create_browser_session`：可持久化的云端浏览器会话\n\n## 认证\n\nTinyFish 的 MCP 端点不接受 API key，只认 OAuth，所以这个包不包含任何凭据字段；登录令牌由 Hana 在本机保存，不经过包本身。\n\n端点：`https://agent.tinyfish.ai/mcp`（streamable-http）。"
+    },
+    {
+      "kind": "app",
+      "id": "repo-auto-index",
+      "tag": "v0.4.0",
+      "sha256": "89b1e63cd241fbacbbd0211f0068f8d006c4cf7deaad16c869e4733bc7666414",
+      "readme": "# 仓库自动索引\n\n一仓一索引。克隆即登记扫描，随时可打断，本仓隔离查看。\n\n## 它做什么\n\n给一个仓库建立认知索引：插件负责清点文件、跟踪进度、隔离展示，语义条目由 Agent 经 AOCI 链路创作。插件只做结构扫描，不替模型写认知。\n\n每个仓库的索引就是它自己目录下的 `.aoci/` 与 `aoci.txt`。插件不建大库、不跨仓混检；删仓即删注册，不碰源目录。\n\n## 三张卡\n\n**面板** — 注册与扫描。六种状态各有明确出口，扫描过程中随时可打断，停了就是停了，状态落盘。\n\n**扫描报告** — 一次扫描的现状：状态、文件数、索引条目数、读不到的目录、上次扫描时间。模型可读这张卡看现状。\n\n**链路体检** — 六环（初始化 / 清点 / 基线 / 索引 / 核对 / 检索）逐环给状态、证据与来源文件，可溯源到 `.aoci` 下具体哪一个文件；缺环时直接给修复步骤。模型可读这张卡判断链路断在哪里。\n\n## 模型工具\n\n| 工具 | 用途 |\n| --- | --- |\n| `repo_index_add` | 登记一个目录并开始扫描 |\n| `repo_index_list` | 列出已登记仓库与进度 |\n| `repo_index_status` | 查单个仓库的索引现状 |\n| `repo_index_cancel` | 打断正在跑的扫描 |\n| `repo_index_search` | 只搜一个仓库自己的索引，返回命中行与行号 |\n\n## 权限\n\n| 能力 | 用途 |\n| --- | --- |\n| `app/resources.read` | 读取被索引仓库的文件与目录 |\n| `app/tasks.manage` | 建立扫描任务并支持打断 |\n| `app/tools.expose-to-model` | 让模型能查索引状态与检索条目 |\n| `app/sessions.read` | 查找可投递的会话 |\n| `app/sessions.manage` | 把报告卡投递到指定会话 |\n| `app/session.start-turn` | 卡片回传时唤醒 Agent |\n\n不联网，不访问外部服务，不上传任何数据。\n\n## 已知边界\n\n- 语义条目由 Agent 写，插件不生成\n- 克隆由宿主或 Agent 执行，插件只登记已存在的目录；目录不存在时返回可复制的克隆指令，不假装自己克隆了\n- 不跨仓检索：一个仓库的索引只在自己范围内可搜\n- 语义索引走 AOCI 连接器，插件不私自调模型\n"
     }
   ]
 }
