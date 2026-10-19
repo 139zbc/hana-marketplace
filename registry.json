@@ -618,6 +618,12 @@
       "id": "mode-center",
       "repository": "shenmingganlin/mode-center",
       "publisher": "甘霖"
+    },
+    {
+      "kind": "app",
+      "id": "diff-stat",
+      "repository": "kagurazakayukari/diff-stat",
+      "publisher": "紫喵"
     }
   ]
 }
