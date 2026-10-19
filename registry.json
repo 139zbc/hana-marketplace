@@ -612,6 +612,12 @@
       "id": "cyber-newspaper",
       "repository": "YMaTaZ/cyber-newspaper",
       "publisher": "YMaTaZ"
+    },
+    {
+      "kind": "app",
+      "id": "mode-center",
+      "repository": "shenmingganlin/mode-center",
+      "publisher": "甘霖"
     }
   ]
 }
