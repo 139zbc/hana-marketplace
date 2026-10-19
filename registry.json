@@ -606,6 +606,12 @@
       "id": "repo-auto-index",
       "repository": "X-J-S-C/repo-auto-index",
       "publisher": "X-J-S-C"
+    },
+    {
+      "kind": "app",
+      "id": "cyber-newspaper",
+      "repository": "YMaTaZ/cyber-newspaper",
+      "publisher": "YMaTaZ"
     }
   ]
 }
