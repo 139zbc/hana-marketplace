@@ -624,6 +624,12 @@
       "id": "diff-stat",
       "repository": "kagurazakayukari/diff-stat",
       "publisher": "紫喵"
+    },
+    {
+      "kind": "app",
+      "id": "quick-cmd",
+      "repository": "Magnemomet/hana-quick-cmd",
+      "publisher": "Magnemomet"
     }
   ]
 }
