@@ -14,6 +14,9 @@ on:
       - approvals.json
       - scripts/extension-market-sync.mjs
       - .github/workflows/sync-market.yml
+  # Refresh download counts daily. Approvals still change only through reviewed pull requests.
+  schedule:
+    - cron: "23 3 * * *"
   workflow_dispatch:
 
 concurrency:
@@ -56,7 +59,8 @@ jobs:
         run: node scripts/extension-market-sync.mjs --discover --registry ../candidate-registry.json --approvals ../candidate-approvals.json --previous index.v2.json --changed-from registry.json
 
   generate:
-    # Publication changes only when reviewed registry or approvals change on main.
+    # Packages change only when reviewed registry or approvals change on main;
+    # scheduled runs refresh only download counts.
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:

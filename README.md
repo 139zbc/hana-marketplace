@@ -22,7 +22,8 @@ guide: packaging, stable Releases, enrollment PRs, review, updates, and troubles
 2. Make a pull request that adds one record to `registry.json` and one record
    to `approvals.json`. The enrollment contains the extension kind, safe id,
    `owner/repository`, and publisher name. The approval contains the kind, id,
-   release tag, and the ZIP SHA-256 from the entry metadata.
+   release tag, and the ZIP SHA-256 from the entry metadata; it may also carry
+   `readme`, the reviewed Markdown introduction shown in the store.
 3. Maintainers review that exact package and merge the pull request. The
    market workflow publishes only approved packages and atomically updates the
    index when every changed approval validates. Enrollments without an
@@ -30,7 +31,21 @@ guide: packaging, stable Releases, enrollment PRs, review, updates, and troubles
 
 Every update follows the same review: the author publishes a new stable
 release and opens a pull request that changes the tag and SHA-256 in
-`approvals.json`. Nothing is discovered or published automatically.
+`approvals.json`. Nothing is discovered or published automatically. Changing
+only the introduction is also a reviewed change: edit the approval's `readme`
+in a pull request. The index copies that text and never fetches an author URL,
+so the storefront cannot change without a merged PR; an item without a snapshot
+shows no reviewed introduction, and market READMEs never load remote images.
+
+Authors can keep the standard version-submission flow. A maintainer may instead
+collect and review the introduction text and images from an approved release and
+write `readme` on the author's behalf, so authors do not need to submit the
+snapshot themselves; the reviewed copy is the submission source and is never
+fetched live after review. When an update changes the introduction, the existing
+`readme` must be confirmed to still match or be re-reviewed. Authors may still
+submit `readme` themselves if they prefer.
+
+作者可继续按标准版本投稿流程提交。维护者也可以从已批准的 Release 收集并审核介绍正文与配图后代作者写入 `readme`，作者无需重复提交快照；采审副本即为提交来源，审核后不再活取。版本更新时，既有 `readme` 须确认仍对应当前介绍，否则重新审核。作者仍可自行提交 `readme`。
 
 For apps, connectors, roles, and bundles the entry asset is named
 `<kind>-<id>-<version>.entry.json`. Skills and recipes use
@@ -42,6 +57,12 @@ or approval is invalid, or a newly approved release is unavailable,
 downgraded, or does not match its approved SHA-256. Published entries whose
 approval did not change are reused without downloading them again. Fix the
 reported enrollment, approval, or release, then rerun the workflow.
+
+Each published item carries `stats.downloads`: the total GitHub download
+count of its published ZIP files, read from release metadata. A daily scheduled
+run refreshes these counts without downloading packages again. Hana uses them
+only to sort the market. If a count cannot be read, the workflow keeps the
+previous value and prints a warning.
 
 Catalog updates never install updates automatically in Hana. The mainland
 China catalog is reviewed and hosted independently; this repository publishes
@@ -94,3 +115,42 @@ own documents, templates and workflows. To update the tool, run
 `npm run export:extension-market -- --update <path-to-this-checkout>` from a Hana
 checkout; it replaces only `scripts/extension-market-sync.mjs` and
 `market-export.json`. Review the resulting changes before committing them.
+
+## Review scope and responsibility / 审核范围与责任说明
+
+本市场收录第三方扩展。上架审核主要检查提交规范、基本可加载性及明显的安全与公开内容风险，不构成全面的功能、代码安全或法律合规认证。
+
+收录、审核通过或合并 PR，不代表市场维护者认同或支持扩展及其介绍、文档、素材中表达的观点，也不代表推荐或担保其质量。
+
+扩展作者应确保其代码、文档、图片及其他素材具有合法使用和分发依据，并遵守适用法律及相关服务条款。各扩展适用其自身声明的许可证。
+
+如发现涉嫌侵权、违法违规或其他重大风险，请通过本仓库 Issue 联系维护者，提供相关条目、具体问题及必要证据。请勿公开提交个人敏感信息或凭据。维护者将根据情况核实，并采取要求整改、暂停收录或下架等措施；紧急风险可先暂停收录。
+
+本说明不排除或限制适用法律规定不得排除或限制的责任。
+
+This market lists third-party extensions. Admission review mainly checks
+submission conformance, basic loadability, and obvious security or public-content
+risks; it is not a comprehensive functional, code-security, or legal-compliance
+certification.
+
+Listing, passing review, or merging a pull request does not mean the market
+maintainers endorse or support any views expressed in an extension or its
+introduction, documentation, or assets, nor does it recommend or warrant their
+quality.
+
+Extension authors are responsible for ensuring that their code, documentation,
+images, and other assets have a lawful basis for use and distribution, and for
+complying with applicable laws and relevant terms of service. Each extension is
+governed by the license it declares.
+
+To report suspected infringement, illegality, or other significant risk, contact
+the maintainers through this repository's Issues with the relevant entry, the
+specific problem, and necessary evidence. Do not post personal sensitive
+information or credentials publicly. Maintainers will verify as appropriate and
+take measures such as requesting fixes, pausing listing, or removal; urgent
+risks may be paused first.
+
+This notice does not exclude or limit any liability that applicable law does not
+allow to be excluded or limited.
+
+https://github.com/liliMozi/hana-marketplace/issues

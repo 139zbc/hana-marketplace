@@ -35,6 +35,8 @@ function isCapabilityName(value) {
 // shared/extension-market-index.ts
 var MARKET_INDEX_SCHEMA_VERSION = 2;
 var MAX_MARKET_ARCHIVE_BYTES = 300 * 1024 * 1024;
+var MAX_MARKET_README_BYTES = 2 * 1024 * 1024;
+var MAX_MARKET_INDEX_BYTES = 8 * 1024 * 1024;
 function isPlainObject(value) {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
@@ -57,6 +59,9 @@ function isSha256Hex(value) {
 }
 function isPositiveInteger(value) {
   return Number.isInteger(value) && value > 0;
+}
+function isNonNegativeInteger(value) {
+  return Number.isInteger(value) && value >= 0;
 }
 function isParseableDate(value) {
   return typeof value === "string" && value.length > 0 && !Number.isNaN(Date.parse(value));
@@ -90,6 +95,13 @@ function describeItemVersion(entry, path2) {
     return `${path2}.minAppVersion must be a non-empty string`;
   }
   return describeArchive(entry.archive, `${path2}.archive`);
+}
+function describeStats(value, path2) {
+  if (!isPlainObject(value)) return `${path2} must be an object`;
+  if (value.downloads !== void 0 && !isNonNegativeInteger(value.downloads)) {
+    return `${path2}.downloads must be a non-negative integer`;
+  }
+  return null;
 }
 function describeCompatibility(value, path2) {
   if (!isPlainObject(value)) return `${path2} must be an object`;
@@ -135,7 +147,12 @@ function describeMarketItem(raw, path2) {
   if (raw.icon !== void 0 && typeof raw.icon !== "string") return `${path2}.icon must be a string`;
   if (raw.categories !== void 0 && !isStringArray(raw.categories)) return `${path2}.categories must be an array of strings`;
   if (raw.keywords !== void 0 && !isStringArray(raw.keywords)) return `${path2}.keywords must be an array of strings`;
+  if (raw.readme !== void 0 && typeof raw.readme !== "string") return `${path2}.readme must be a string`;
   if (raw.readmeUrl !== void 0 && typeof raw.readmeUrl !== "string") return `${path2}.readmeUrl must be a string`;
+  if (raw.stats !== void 0) {
+    const statsError = describeStats(raw.stats, `${path2}.stats`);
+    if (statsError) return statsError;
+  }
   return null;
 }
 function itemLabel(raw, index) {
@@ -791,12 +808,21 @@ function enrollmentKey(record) {
 }
 function readApprovalRecord(approval, label) {
   if (!isPlainObject2(approval)) throw new Error(`${label} must be an object`);
-  exactKeys(approval, ["kind", "id", "tag", "sha256"], label);
+  exactKeys(approval, ["kind", "id", "tag", "sha256", "readme"], label);
   if (!isExtensionKind(approval.kind)) throw new Error(`${label}.kind must be one of ${EXTENSION_KINDS.join(", ")}`);
   if (!isSafeExtensionId(approval.id)) throw new Error(`${label}.id is not a safe extension id`);
   if (typeof approval.tag !== "string" || !TAG_RE.test(approval.tag)) throw new Error(`${label}.tag must be a release tag of letters, digits, ".", "_", "+", or "-"`);
   if (typeof approval.sha256 !== "string" || !SHA256_RE.test(approval.sha256)) throw new Error(`${label}.sha256 must be 64 lowercase hexadecimal characters`);
-  return { kind: approval.kind, id: approval.id, tag: approval.tag, sha256: approval.sha256 };
+  const readme = readApprovedReadme(approval, label);
+  return { kind: approval.kind, id: approval.id, tag: approval.tag, sha256: approval.sha256, ...readme === null ? {} : { readme } };
+}
+function readApprovedReadme(approval, label) {
+  if (approval.readme === void 0) return null;
+  if (typeof approval.readme !== "string") throw new Error(`${label}.readme must be a string`);
+  if (!approval.readme.trim()) throw new Error(`${label}.readme must be a non-empty Markdown string; delete the field to publish without a reviewed introduction`);
+  const bytes = Buffer.byteLength(approval.readme, "utf8");
+  if (bytes > MAX_MARKET_README_BYTES) throw new Error(`${label}.readme must be no longer than ${MAX_MARKET_README_BYTES} bytes`);
+  return approval.readme;
 }
 function readApprovalList(raw) {
   if (!isPlainObject2(raw)) throw new Error("approvals must be a JSON object");
@@ -972,7 +998,20 @@ function projectEntry(entry, registration, archiveUrl) {
     archive: { ...entry.archive, url: archiveUrl }
   };
   delete projected.versions;
+  delete projected.stats;
+  delete projected.readme;
+  delete projected.readmeUrl;
   return projected;
+}
+function indexPayloadBytes(index) {
+  return Buffer.byteLength(`${JSON.stringify(index, null, 2)}
+`, "utf8");
+}
+function assertIndexFitsClientPayload(index) {
+  const bytes = indexPayloadBytes(index);
+  if (bytes > MAX_MARKET_INDEX_BYTES) {
+    throw new Error(`generated index is ${bytes} bytes, above the ${MAX_MARKET_INDEX_BYTES}-byte payload limit clients accept; trim README snapshots or entries`);
+  }
 }
 function strictIndex(raw, label) {
   const result = validateMarketIndexV2(raw);
@@ -1030,22 +1069,96 @@ async function readReleaseCandidate(registration, { approval, fetchImpl, token }
   await verifyArchive(zipAsset, entry, registration, { fetchImpl, token });
   return { candidate: normalizeItem(projectEntry(entry, registration, zipAsset.browser_download_url)), tagName };
 }
-function publishedTag(item, repository) {
-  if (!item || item.repository !== canonicalRepository(repository)) return null;
+function releaseAssetLocation(archiveUrl, repository) {
   let decodedPath;
   try {
-    decodedPath = decodeURIComponent(new URL(item.archive.url).pathname);
+    decodedPath = decodeURIComponent(new URL(archiveUrl).pathname);
   } catch {
     return null;
   }
   const prefix = `/${repository}/releases/download/`;
   if (!decodedPath.startsWith(prefix)) return null;
   const parts = decodedPath.slice(prefix.length).split("/");
-  return parts.length === 2 && parts[0] ? parts[0] : null;
+  return parts.length === 2 && parts[0] && parts[1] ? { tag: parts[0], name: parts[1] } : null;
 }
-function withReadme(item, registration, approval) {
-  if (item.readmeUrl) return item;
-  return { ...item, readmeUrl: `https://raw.githubusercontent.com/${registration.repository}/${encodeURIComponent(approval.tag)}/README.md` };
+function publishedTag(item, repository) {
+  if (!item || item.repository !== canonicalRepository(repository)) return null;
+  return releaseAssetLocation(item.archive.url, repository)?.tag ?? null;
+}
+var MAX_RELEASE_PAGES = 10;
+function validDownloadCount(asset, label) {
+  if (!Number.isInteger(asset.download_count) || asset.download_count < 0) throw new Error(`${label} asset ${asset.name} has no valid download count`);
+  return asset.download_count;
+}
+async function readStableReleases(registration, { fetchImpl, token, releases }) {
+  const key = `${registration.repository}@*`;
+  if (!releases.has(key)) releases.set(key, (async () => {
+    const all = [];
+    for (let page = 1; page <= MAX_RELEASE_PAGES; page += 1) {
+      const response = await fetchBounded({
+        url: `${API_BASE}/repos/${registration.repository}/releases?per_page=100&page=${page}`,
+        maxRedirects: 2,
+        maxResponseBytes: MAX_API_BYTES,
+        timeoutMs: TIMEOUT_MS,
+        fetchImpl: githubApiFetch(fetchImpl, token)
+      });
+      assertHttpSuccess(response, `${registration.kind}/${registration.id} release list`);
+      const list = parseJson(response.body, "release list");
+      if (!Array.isArray(list)) throw new Error("release list must be an array");
+      all.push(...list);
+      if (list.length < 100) return all.filter((release) => isPlainObject2(release) && release.draft !== true && release.prerelease !== true && Array.isArray(release.assets));
+    }
+    throw new Error(`release list has more than ${MAX_RELEASE_PAGES * 100} releases`);
+  })());
+  return releases.get(key);
+}
+async function readDownloadCount(item, registration, options) {
+  const current = releaseAssetLocation(item.archive.url, registration.repository);
+  if (!current) throw new Error(`archive ${item.archive.url} is not a release asset of ${registration.repository}`);
+  if (registration.kind === "skill" || registration.kind === "recipe") {
+    const pattern = new RegExp(`^${registration.kind}-${registration.id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}-[0-9a-f]{64}\\.zip$`);
+    let total2 = 0;
+    let foundCurrent = false;
+    for (const release of await readStableReleases(registration, options)) {
+      for (const asset of release.assets) {
+        if (!isPlainObject2(asset) || typeof asset.name !== "string" || !pattern.test(asset.name)) continue;
+        total2 += validDownloadCount(asset, `release ${release.tag_name}`);
+        if (release.tag_name === current.tag && asset.name === current.name) foundCurrent = true;
+      }
+    }
+    if (!foundCurrent) throw new Error(`release ${current.tag} is missing published asset ${current.name}`);
+    return total2;
+  }
+  let total = 0;
+  for (const archive of [item.archive, ...(item.versions || []).map((version) => version.archive)]) {
+    const location = releaseAssetLocation(archive.url, registration.repository);
+    if (!location) throw new Error(`archive ${archive.url} is not a release asset of ${registration.repository}`);
+    const key = `${registration.repository}@${location.tag}`;
+    if (!options.releases.has(key)) options.releases.set(key, readRelease(registration, { tag: location.tag, fetchImpl: options.fetchImpl, token: options.token }));
+    const { assets, label } = await options.releases.get(key);
+    const asset = assets.find((candidate) => isPlainObject2(candidate) && candidate.name === location.name);
+    if (!asset) throw new Error(`${label} is missing published asset ${location.name}`);
+    total += validDownloadCount(asset, label);
+  }
+  return total;
+}
+async function withDownloadStats(item, registration, previousStats, options, warnings) {
+  try {
+    const downloads = await readDownloadCount(item, registration, options);
+    return { ...item, stats: { ...item.stats, downloads } };
+  } catch (error) {
+    warnings.push(`${registration.kind}/${registration.id}: download count unavailable, kept the previous value: ${error instanceof Error ? error.message : String(error)}`);
+    const kept = { ...item, stats: previousStats };
+    if (!previousStats) delete kept.stats;
+    return kept;
+  }
+}
+function withApprovedReadme(item, approval) {
+  const next = { ...item };
+  delete next.readmeUrl;
+  if (approval.readme !== void 0) next.readme = approval.readme;
+  else delete next.readme;
+  return next;
 }
 function reusablePublishedItem(item, registration, approval) {
   if (!item || item.publisher !== registration.publisher || item.archive.sha256 !== approval.sha256) return null;
@@ -1059,6 +1172,8 @@ async function synchronizeMarket({ registry, approvals, previousIndex = null, fe
   const failures = [];
   const items = [];
   const pending = [];
+  const warnings = [];
+  const statsOptions = { fetchImpl, token, releases: /* @__PURE__ */ new Map() };
   for (const registration of registrations) {
     const approval = approved.get(enrollmentKey(registration));
     if (!approval) {
@@ -1068,12 +1183,13 @@ async function synchronizeMarket({ registry, approvals, previousIndex = null, fe
     const published = previousItems.get(enrollmentKey(registration));
     const reusable = reusablePublishedItem(published, registration, approval);
     if (reusable) {
-      items.push(withReadme(reusable, registration, approval));
+      items.push(await withDownloadStats(withApprovedReadme(reusable, approval), registration, reusable.stats, statsOptions, warnings));
       continue;
     }
     try {
       const { candidate } = await readReleaseCandidate(registration, { approval, fetchImpl, token });
-      items.push(withReadme(historyFor(published, candidate, registration), registration, approval));
+      const item = withApprovedReadme(historyFor(published, candidate, registration), approval);
+      items.push(await withDownloadStats(item, registration, published?.stats, statsOptions, warnings));
     } catch (error) {
       failures.push(`${registration.kind}/${registration.id} (${registration.repository}): ${error instanceof Error ? error.message : String(error)}`);
     }
@@ -1094,8 +1210,9 @@ ${failures.map((failure) => `- ${failure}`).join("\n")}`);
     draft.publishedAt = new Date(Math.max(requestedMs, previousMs + 1)).toISOString();
   }
   const index = strictIndex(draft, "generated index");
+  assertIndexFitsClientPayload(index);
   const unchanged = Boolean(previous && deepEqual(index, previous));
-  return { index, unchanged, pending };
+  return { index, unchanged, pending, warnings };
 }
 async function discoverReleases({ registry, approvals, previousIndex = null, onlyChangedFrom = null, fetchImpl = fetch, token }) {
   const registrations = readRegistry(registry);
@@ -1181,8 +1298,9 @@ async function main() {
       if (args.changedFrom && skipped.length) process.exitCode = 1;
       return;
     }
-    const { index, unchanged, pending } = await synchronizeMarket({ registry, approvals: approvalsDocument, previousIndex: previous, token: process.env.GITHUB_TOKEN });
+    const { index, unchanged, pending, warnings } = await synchronizeMarket({ registry, approvals: approvalsDocument, previousIndex: previous, token: process.env.GITHUB_TOKEN });
     if (pending.length) console.log(`extension-market-sync: awaiting approval: ${pending.join(", ")}`);
+    for (const warning of warnings) console.warn(`extension-market-sync: warning: ${warning}`);
     if (args.check) console.log(`extension-market-sync: ${unchanged ? "no changes" : "index would change"} (${index.items.length} item(s))`);
     else if (unchanged && outPath === previousPath) console.log(`extension-market-sync: no changes (${index.items.length} item(s))`);
     else {
