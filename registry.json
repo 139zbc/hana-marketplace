@@ -60,6 +60,12 @@
       "id": "session-insight",
       "repository": "youyongdemao/HanaAgent-session-insight",
       "publisher": "Swimming Cat"
+    },
+    {
+      "kind": "app",
+      "id": "hana-local-tts",
+      "repository": "139zbc/HanaAgent-plugins-HanaLocalTTS",
+      "publisher": "139zbc"
     }
   ]
 }

@@ -60,6 +60,12 @@
       "id": "video-summarizer",
       "tag": "v1.2.0",
       "sha256": "b285d7c8537b1cf45ee2c70acfbfb26fe2b9757eea043f353416cad82643ebf0"
+    },
+    {
+      "kind": "app",
+      "id": "hana-local-tts",
+      "tag": "v0.9.16",
+      "sha256": "58489468baa9746e1fa8cb7f8786ec49175d7d89e7b190fb00876480744be315"
     }
   ]
 }
